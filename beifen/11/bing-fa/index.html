@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>并发 - Jackpelf' Blog</title>
+  <meta name="author" content="Jackpelf">
+
+  
+  <meta name="description" content="0x00 基于进程的并发编程 缺点：为了共享信息，它们必须使用显示的IPC机制。 0x01 基于I/O多路复用的并发编程 使用select函数，要求内核挂起进程，只有在一个或多个I/O事件发生后，才将控制返回给应用程序。 int select(int n, fd_set *fdset, NULL &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jackpelf.github.io/blog/2015/09/11/bing-fa/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Jackpelf' Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Jackpelf' Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="jackpelf.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">并发</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-11T10:35:18+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:35 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h3>0x00 基于进程的并发编程</h3>
+
+<p>缺点：为了共享信息，它们必须使用显示的IPC机制。</p>
+
+<h3>0x01  基于I/O多路复用的并发编程</h3>
+
+<p>使用select函数，要求内核挂起进程，只有在一个或多个I/O事件发生后，才将控制返回给应用程序。</p>
+
+<pre><code>int select(int n, fd_set *fdset, NULL, NULL, NULL);返回已准备好的描述符的非零个数，若出错则返回-1
+
+FD_ZERO()   clear all bit in fdset
+FD_CLR()    clear bin fd in fdset
+FD_SET()    turn on bit fd in fdset
+FD_ISSET()          
+</code></pre>
+
+<p>select函数处理类型为fd_set的集合。select函数有两个输入，一个是描述符集合，和该读集合的基数(n).select函数会一直阻塞，知道集合中至少有一个描述符准备好可以读。当且仅当一个从该描述符读取一个字节的请求不会阻塞时，描述符k就表示准备好可以读了。</p>
+
+<p>FD_ZERO创建一个空的集合
+FD_SET定义读集合
+FD_ISSET判断是否准备好了</p>
+
+<h3>0x02  基于线程的并发编程</h3>
+
+<p>线程就是运行在进程上下文的逻辑流。每个线程都有它自己的线程上下文，包括唯一的整数线程ID(TID),栈，栈指针，程序计数器，通用目的寄存器和条件吗。
+线程由内核自动调度。
+线程不是按照严格的父子层次来组织，和一个进程相关的线程组成一个对等线程池。
+一个线程可以杀死任何对等线程。</p>
+
+<pre><code>#include "csapp.h"
+void *thread(void *vargp);
+
+int main()
+{
+    pthread_t tid;
+    Pthread_create(&amp;tid, NULL, thread, NULL);
+    Pthread_join(tid, NULL);
+    exit();
+}
+
+void *thread(void *vargp)
+{
+    printf("hello, world!\n");
+    return NULL;
+}
+</code></pre>
+
+<p>创建线程
+int pthread_create(pthread_t <em>tid, pthread_attr_t </em>attr, func <em>f, void </em>arg);
+终止线程
+void pthread_exit(void *thread_return);
+回收已中止线程资源
+int pthread_join(pthread_t tid, void **thread_return);
+阻塞直到线程tid终止，将线程返回的指针赋值为thread_return指向的位置，然后回收已终止线程占用的资源。
+分离线程
+为了避免储存器泄露，每个可结合线程都应该被其他线程显式地回收或通过pthread_detach函数被分离</p>
+
+<p>线程共享虚拟储存器,打开文件的集合
+每个线程都有它自己的线程ID、栈、栈指针，PC、条件吗、通用寄存器
+全局变量、本地静态变量是共享的
+本地自动变量是不共享的</p>
+
+<h3>0x03  信号量</h3>
+
+<p>信号量s是具有非负整数值的全局变量，只能由两种操作来处理</p>
+
+<p>sem_init()
+sem_wait()
+sem_post()</p>
+
+<p>互斥
+信号量提供了一种很方便的方法来确保对共享变量的互斥访问。
+二元信号量也称为互斥锁。</p>
+
+<p>共享
+信号量的另一个重要作用是调度对共享资源的访问，</p>
+
+<h3>0x04 并发问题</h3>
+
+<p>线程安全
+具有线程安全性属性的函数称为线程安全的，
+不安全函数：
+1.不保护共享变量的函数
+2.保持跨越多个调用的状态的函数，rand()
+3.返回指向静态变量的指针的函数。</p>
+
+<p>可重入性
+当被多个线程调用时，不会引用任何共享数据，叫做可重入函数.</p>
+
+<p>竞争
+发生竞争是因为程序员假定线程将按照某种特殊的轨迹线穿过执行空间。
+为了消除竞争，可以动态地为每个整数ID分配一个独立的块，并且传递给线程例程一个指向这个块的指针。</p>
+
+<p>死锁
+一个线程被阻塞了，等待一个永远不会为真的条件</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jackpelf</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-09-11T10:35:18+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:35 am</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jackpelf.github.io/blog/2015/09/11/bing-fa/" data-via="" data-counturl="http://jackpelf.github.io/blog/2015/09/11/bing-fa/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/09/10/pirate-danbi-exp/" title="Previous Post: pirate_danbi exp">&laquo; pirate_danbi exp</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/09/12/int3rupted/" title="Next Post: int3rupt">int3rupt &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/19/des-and-aes/">DES &amp; AES</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/18/codegate-bookstore/">Codegate_bookstore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/17/prog-link/">Prog-link</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/17/sys/">Sys</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/17/codegate-shock/">Codegate Shock</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Jackpelf -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,352 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Network - Jackpelf' Blog</title>
+  <meta name="author" content="Jackpelf">
+
+  
+  <meta name="description" content="0x00 从网络上接收到的数据从适配器经过I/O和储存器总线拷贝到储存器，典型的是通过DMA传送。
+一个以太网断包括一些电缆和集线器。
+集线器不加分辩地从一个端口上接收的每个位复制到所有端口上。
+每个以太网适配器都有一个全球唯一的48位地址。一台主机可以发送一段位，称为帧。
+使用网桥可以， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jackpelf.github.io/blog/2015/09/12/network/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Jackpelf' Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Jackpelf' Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="jackpelf.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Network</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-12T22:21:39+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:21 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h3>0x00</h3>
+
+<p>从网络上接收到的数据从适配器经过I/O和储存器总线拷贝到储存器，典型的是通过DMA传送。<br/>
+一个以太网断包括一些电缆和集线器。<br/>
+集线器不加分辩地从一个端口上接收的每个位复制到所有端口上。<br/>
+每个以太网适配器都有一个全球唯一的48位地址。一台主机可以发送一段位，称为帧。<br/>
+使用网桥可以，多个以太网可以连接成较大的局域网，称为桥接以太网。<br/>
+网桥随着时间自动学习哪个主机可以通过哪个端口可达，只在有必要时，有选择地将帧从一个端口拷贝到另一个端口。<br/>
+路由器可以将多个不兼容的局域网连接起来。</p>
+
+<pre><code>           主机A                                             主机B  
+        |                                                 ^  
+        V                                                 |  
+         协议软件                                          协议软件  
+        |                                                 ^  
+        V                                                 |  
+          LAN1适配器                                     LAN2适配器  
+        |                         ^  
+        |                                                 |  
+        ------------&gt;LAN1适配器    LAN2适配器--------------  
+                |       ^  
+                V       |  
+                ----协议软件-----  
+</code></pre>
+
+<h3>0x01</h3>
+
+<p>因特网的客户端和服务器混合使用套接字接口函数和Unix I/O函数来进行通信。</p>
+
+<p>ip地址<br/>
+    struct in_addr{<br/>
+        unsigned int s_addr;<br/>
+    };<br/>
+ip地址一大端法存放<br/>
+htonl、ntohs、将主机字节顺序转换为网络字节顺序。<br/>
+DNS通过分布世界范围内的数据库<br/>
+struct hostent{<br/>
+    char *h_name;<br/>
+    char <strong>h_aliases;<br/>
+    int h_addrtype;<br/>
+    int h_length;<br/>
+    char </strong>h_addr_list;<br/>
+}</p>
+
+<p>因特网应用程序通过调用gethostbyname和gethostbyaddr函数，从DNS数据库中检索任意的主机条目。<br/>
+一个套接字是连接的一个端点。<br/>
+每个套接字都有相应的套接字地址。<br/>
+套接字地址由因特网地址和一个16位的整数端口组成。<br/>
+当客户端发起连接请求时，客户端套接字地址中的端口是由内核自动分配，称为临时端口。<br/>
+/etc/services包含一张这台机器提供的服务以及它们的端口号。<br/>
+一个连接有两端的套接字地址确定，叫做套接字对<br/>
+由下列元组表示：(cliaddr:cliport, servaddr:aervport)</p>
+
+<h3>0x02 套接字和套接字函数</h3>
+
+<p>套接字接口是一组函数，他们和Unix I/O函数结合创建网络应用</p>
+
+<pre><code>             客户端                     服务器  
+             socket              socket  
+       |                           |  
+       |                           V  
+       |                         bind                      
+</code></pre>
+
+<p>open_clientfd{     |                           |<br/>
+           |                           V<br/>
+           |                        listen <br/>
+           |                           |<br/>
+           V        连接请求           V <br/>
+        connect&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;>accept&lt;&mdash;&mdash;&mdash;&ndash;<br/>
+           |                           |              |<br/>
+           V                           V              |<br/>
+           rio_writen&mdash;&mdash;&mdash;&mdash;&mdash;->rio_readlineb       |<br/>
+           |                           |              |<br/>
+           V                           V              |<br/>
+         rio_readlineb<---------------rio_writen          | 等待下一个连接请求
+           |                           |              |
+           V       EOF                 V              |
+            close- - - - - - - - - >rio_readlineb         |<br/>
+                           |              |<br/>
+                           V              |<br/>
+                        close&mdash;&mdash;&mdash;&mdash; |</p>
+
+<p>因特网的套接字地址放在sockaddr_in的16字节结构中，<br/>
+    struct sockaddr{<br/>
+        unsigned short  sa_family;  //protocol family<br/>
+        char        sa_data[14];    //address data<br/>
+    }</p>
+
+<pre><code>struct sockaddr_in{  
+    unsigned short  sin_family; //address family (always AF_INET)  
+    unsigned short  sin_port;   //port  
+    struct in_addr  sin_addr;   //IP  
+    unsigned char   sin_zero[8];    //pad to sizeof(struct sockaddr)  
+}  
+</code></pre>
+
+<p>需要将sockaddr_in结构强制转发成通用的sockaddr结构</p>
+
+<p>1.socket 函数<br/>
+    int socket(int domain, int type, int protocol);<br/>
+客户端和服务器使用socket函数来川建一个套接字描述符<br/>
+clientfd = socket(AF_INET, SOCK_STREAM, 0);<br/>
+AF_INET表明我们正在使用因特网，SOCK_STREAM表示这个套接字是因特网连接的一个端点。</p>
+
+<p>2.connect函数<br/>
+    int connect(int sockfd, struct sockaddr *serv_addr, int addrlen);<br/>
+客户端通过调用connect函数来建立和服务器的连接。<br/>
+connect函数试图与套接字地址为serv_addr的服务器建立一个因特网连接，其中addrlen是sizeof(sockaddr_in).connect函数会阻塞，一直到连接成功建立或发生错误。</p>
+
+<p>3.open_clientfd函数<br/>
+将socket和connect函数包装成一个叫做open_clientfd的函数<br/>
+    int open_clienfd(char *hostname, int port);</p>
+
+<p>4.bind函数<br/>
+    int bind(int sockfd, struct sockaddr *my_addr, int addrlen);<br/>
+bind函数告诉内核将my_addr中的服务器套接字地址和套接字描述符sockfd联系起啦</p>
+
+<p>5.listen函数<br/>
+    int listen(int sockfd, int backlog);<br/>
+socket函数创建的描述符对应于主动套接字<br/>
+listen函数将sockfd从一个主动套接字转化为一个监听套接字，该套接字可以接受来自客户端的连接请求。</p>
+
+<p>6.open_listenfd<br/>
+将socket/bind/listen函数结合成open_listenfd的辅助函数</p>
+
+<p>7.accept函数<br/>
+    int accept(int listenfd, struct sockaddr <em>addr, int </em>addrlen);<br/>
+服务器通过调用accept函数来等待来自客户端的连接请求<br/>
+accept函数等待来自客户端的连接请求到达侦听描述符listenfd,然后再addr中填写客户端套接字地址,并返回一个已连接的描述符，可用来利用Unix I/O函数与客户端通信。</p>
+
+<p>EOF是内核检测到的一种条件，应用程序在它接收到一个由read函数返回的零返回码时，就会发现EOF条件。<br/>
+对于磁盘文件，当前文件位置超出文件长度就会发生EOF，<br/>
+对于因特网连接，当一个进程关闭连接它的那一端时就会发生EOF。连接另一端的进程在试图读取流中最后一个字节后就会发生EOF。</p>
+
+<h3>0x03 Web服务器</h3>
+
+<p>Web内容<br/>
+对于Web客户端和服务器而言，内容是与一个MIME(多用途的网际邮件扩充协议)类型相关的字节序列.</p>
+
+<p>MIME类型  <br/>
+text/html(HTML页面）<br/>
+text/plain(无格式文本）<br/>
+application/postscript(postscript文档）<br/>
+image/gif(gip图像）<br/>
+image/jpeg(jpeg格式图像)</p>
+
+<p>Http请求<br/>
+一个http请求由一个请求行，后面跟随多个请求报头<br/>
+host报头在http/1.1中是需要的，在http/1.0是不需要的。代理缓存会使用host报头，这个代理缓存作为浏览器和管理被请求文件的原是服务器的中介。host报头指明了原始服务器的域名。<br/>
+http响应<br/>
+http响应由一个响应行(response line)，后面跟随多个相应报头(response header)，在跟随一个终止报头的空行，在跟随一个响应主体response body)。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jackpelf</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-09-12T22:21:39+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:21 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jackpelf.github.io/blog/2015/09/12/network/" data-via="" data-counturl="http://jackpelf.github.io/blog/2015/09/12/network/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/09/12/int3rupted/" title="Previous Post: int3rupt">&laquo; int3rupt</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/09/13/format-string/" title="Next Post: format string">format string &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/19/des-and-aes/">DES &amp; AES</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/18/codegate-bookstore/">Codegate_bookstore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/17/prog-link/">Prog-link</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/17/sys/">Sys</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/17/codegate-shock/">Codegate Shock</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Jackpelf -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+package com.example.net;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpStatus;
+
+import android.app.Activity;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import android.net.http.AndroidHttpClient;
+
+
+public class MainActivity extends Activity {
+
+	private class mypost extends AsyncTask {
+
+		@Override
+		protected String doInBackground(Object[] objects) {
+			 String httpUrl = "www.baidu.com";  
+		        //HttpGet连接对象  
+		        HttpGet httpRequest = new HttpGet(httpUrl);  
+		         //取得HttpClient对象  
+		            HttpClient httpclient = new DefaultHttpClient();  
+		            //请求HttpClient，取得HttpResponse  
+		            HttpResponse httpResponse = httpclient.execute(httpRequest);  
+		            //请求成功  
+		            if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK)  
+		            {  
+		                //取得返回的字符串  
+		                String strResult = EntityUtils.toString(httpResponse.getEntity());  
+		                mTextView.setText(strResult);  
+		            }  
+		            else 
+		            {  
+		                mTextView.setText("请求错误!");  
+		            }  
+		        }return"2333";
+	};
+
+	protected void onPreExecute() {
+
+		final TextView text = (TextView) findViewById(R.id.textView1);
+		text.setText("开始执行异步线程");
+	}
+
+	protected void onPostExecute(String result) {
+		// 更新UI的操作，这里面的内容是在UI线程里面执行的
+
+		final TextView text = (TextView) findViewById(R.id.textView1);
+		text.setText("异步操作执行结束");
+	}
+
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		OnClickListener myOnClickListener = new OnClickListener() {
+			public void onClick(View v) {
+
+				final TextView text = (TextView) findViewById(R.id.textView1);
+				new mypost().execute();
+
+			}
+		};
+
+		Button button = (Button) findViewById(R.id.button1);
+		button.setOnClickListener(myOnClickListener);
+
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+}

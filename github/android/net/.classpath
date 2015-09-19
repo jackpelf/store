@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="D:/Blue/Android/eclipse64/plugins/org.apache.commons.httpclient_3.1.0.v201012070820.jar"/>
+	<classpathentry kind="lib" path="D:/Blue/Android/eclipse64/plugins/org.apache.commons.io_2.2.0.v201405211200.jar"/>
+	<classpathentry kind="lib" path="D:/Blue/Android/eclipse64/plugins/org.apache.commons.jxpath_1.3.0.v200911051830.jar"/>
+	<classpathentry kind="lib" path="D:/Blue/Android/eclipse64/plugins/org.apache.commons.lang_2.6.0.v201404270220.jar"/>
+	<classpathentry kind="lib" path="D:/Blue/Android/eclipse64/plugins/org.apache.commons.lang3_3.1.0.v201403281430.jar"/>
+	<classpathentry kind="lib" path="D:/Blue/Android/eclipse64/plugins/org.apache.commons.logging_1.1.1.v201101211721.jar"/>
+	<classpathentry kind="lib" path="D:/Blue/Android/eclipse64/plugins/org.apache.commons.math_2.1.0.v201105210652.jar"/>
+	<classpathentry kind="lib" path="D:/Blue/Android/eclipse64/plugins/org.apache.commons.pool_1.6.0.v201204271246.jar"/>
+	<classpathentry kind="lib" path="D:/Blue/Android/eclipse64/plugins/org.apache.httpcomponents.httpclient_4.3.6.v201411290715.jar"/>
+	<classpathentry kind="lib" path="D:/Blue/Android/eclipse64/plugins/org.apache.httpcomponents.httpcore_4.3.3.v201411290715.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

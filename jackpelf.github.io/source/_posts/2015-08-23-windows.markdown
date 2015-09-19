@@ -1,0 +1,31 @@
+---
+layout: post
+title: "windows"
+date: 2015-08-23 19:41:24 -0700
+comments: true
+categories: 
+---
+
+##0x00 CRT-code
+-命令行程序 main()
+-GUI程序 WinMain()
+  
+
+GetCommandLine(),setargv(),setenvp()填充argc,grgv,envp
+
+##0x01 exe,dll,sys
+
+exe,sys通常没有导出表，只有导入表  
+dll有一个OEP----DllMain（）  
+windows vista后，一个驱动程序必须有数字签名，否则他会被拒绝加载  
+
+##0x02 subsystem
+包括-native(sys驱动程序）-console（控制台程序） -Gui（图形程序）  
+
+##0x03 sections
+
+.idata 导入section  
+.edata 导出section
+
+
+
