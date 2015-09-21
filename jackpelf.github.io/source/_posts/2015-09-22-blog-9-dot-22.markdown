@@ -1,0 +1,48 @@
+---  
+layout: post  
+title: "blog_9.22"  
+date: 2015-09-22 00:50:29 +0800  
+comments: true  
+categories:   
+---  
+  
+### misc  
+sigemptyset()将信号集合设置为空。  
+执行成功返回0，错误返回-1  
+  
+定义函数 int sigaction(int signum,const struct sigaction *act ,struct sigaction *oldact);  
+函数说明 sigaction()会依参数signum指定的信号编号来设置该信号的处理函数。参数signum可以指定SIGKILL和SIGSTOP以外的所有信号。  
+  
+int sscanf(const char* buf, char *format,[argument])  
+从buf读取数据写入argument  
+  
+assert语句用来生命某个条件是真的  
+当assert语句失败时，会引发assertionerror  
+  
+pacman -S unzip  
+unzip crc32-0.1.zip  
+  
+struct tm *gmtime(const time_t *time);  
+返回tm类型的结构体  
+  
+libm.so数学计算  
+libz.so	z_zip库  
+  
+uLong crc32(uLong crc, const Bytef * buf, uInt len);  
+On entry, crc is the previous value for the checksum, and buf shall point to an array of len bytes of data to be added to this checksum. The crc32() function shall return the new checksum.  
+  
+对于大于等于128kb的堆chunk使用mmap()  
+  
+CRC32  
+求余对数据左对齐异或得到余数。  
+1.将X的最高次幂为R的生成多项式G(X)转换成对应的R+1位二进制数  
+2.将消息码左毅R位  
+3.用生成多项式对信息吗做除，得到R位余数  
+4.将余数拼到信息吗左移后空出的位置，得到CRC码  
+  
+  
+  
+  
+  
+  
+  

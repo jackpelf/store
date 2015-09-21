@@ -1,0 +1,27 @@
+---
+layout: post
+title: "misc"
+date: 2015-09-20 17:36:09 +0800
+comments: true
+categories: 
+---
+###0x00
+pacman -S setuptools
+pacman -S python-pip
+pip install pwntools
+
+###0x01
+www.google.com/ncr
+
+###0x02
+int bind(int sockfd, const struct sockaddr *addr,  socklen_t addrlen);
+
+	struct sockaddr_in {
+	    short            sin_family;   // e.g. AF_INET
+	    unsigned short   sin_port;     // e.g. htons(3490)
+	    struct in_addr   sin_addr;     // see struct in_addr, below
+	    char             sin_zero[8];  // zero this if you want to
+	};
+输入命令
+	./a
+	nc 192.168.56.102 54647
