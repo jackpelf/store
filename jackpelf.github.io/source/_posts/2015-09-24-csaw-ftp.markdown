@@ -28,5 +28,10 @@ fork调用的一个奇妙之处就是它仅仅被调用一次，却能够返回�
 
 movsxd符号扩展dword源操作数到64位目的操作数
 
-pip install angr-z3
+ipv6
+2001:778::37	可免费上ipv4
+2001:df8:0:7::1	可看youtube
+2001:4860:4860::8888 google dns
 
+capstone import error:ERROR: fail to load the dynamic library
+cp store/tools/libcapstone.so /usr/lib/python2.7/site-package/capstone
