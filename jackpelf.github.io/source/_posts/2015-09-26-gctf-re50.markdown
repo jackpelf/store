@@ -1,0 +1,50 @@
+---
+layout: post
+title: "gctf_re50"
+date: 2015-09-26 19:35:42 +0800
+comments: true
+categories: 
+---
+###0x00
+	    
+	if ( strlen(&buf) != 0 )
+	    {
+	      do
+	      {
+		if ( !isalpha(*(&buf + i)) )
+		{
+		  v5 = (unsigned __int8)*(&buf + i);
+		  if ( (_BYTE)v5 != 123 && (_BYTE)v5 != 125 )
+		  {
+		    print((int)aSorryYouReWron, v8);
+		    exit(0);
+		  }
+		}
+		++i;
+	      }
+	      while ( i < strlen(&buf) );
+	    }
+	    _strlwr(&buf);                              // 转为小写
+	    j = 0;
+	    if ( strlen(&buf) != 0 )
+	    {
+	      do
+		*(&buf + j++) -= 49;
+	      while ( j < strlen(&buf) );
+	    }
+	    if ( !strcmp(&buf, (const char *)&v9) )
+	      print((int)aGood, v8);
+	    else
+	      print((int)aSorryYouReWron, v8);
+
+主要逻辑在此，反推即可
+
+###0x01 sol
+	from binascii import *
+
+	c = '363243354a3131303131393132304c'
+	c = a2b_hex(c)
+	res = ''
+	for i in c:
+		res += chr(ord(i)+49)
+	print res
