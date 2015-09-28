@@ -1,0 +1,82 @@
+---
+layout: post
+title: "misc928"
+date: 2015-09-28 16:29:39 +0800
+comments: true
+categories: 
+---
+###0x00 gotplt  
+got.plt  
+	addr of .dynamic  
+	moduleid  
+	_dl_runtime_resolve()  
+	...  
+	...  
+###0x01 c++  
+c++析构函数无显示参数  
+this指针会隐含的作为参数  
+allocator分配内存  
+template是一个声明模板的关键字，表示声明一个模板关键字class不能省略，如果类型形参多余一个 ，每个形参前都要加class   
+条件运算符的优先级低于移位运算符的优先级  
+  
+source读取并执行filename中的命令  
+  
+###0x02 windows DEP  
+一个进程的DEP设置保存在KPROCESS结构中的_KEXECUTE_OPTIONS  
+可以通过ZwQueryInformationProcess和ZwSetInformationProcess进行查询和修改  
+ZwSetInformationProcess{  
+IN HANDLE;	句柄，-1表示当前进程  
+IN PROCESS_INFORMATION_CLASS;  
+IN PVOID;		可以设置_KEXECUTE_OPTIONS  
+IN ULANG;	第三个参数长度  
+}  
+微软兼容性问题在下述三种情况关闭DEP  
+DLL受SafeDisc版权保护  
+DLL包含.aspcak .pcle .sforce等字节  
+windows vista当DLL包含在注册表HKEY_LOACAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Exection Options\DllNXOptions  
+  
+###0x03 虚拟储存器  
+虚拟储存器作为缓存的工具  
+虚拟储存器被组织为一个存放在磁盘上的N个连续的字节大小的单元组成的数组。  
+虚拟储存器分割的称为虚拟页  
+物理存储器分割为物理页，也称为页帧  
+虚拟页面的集合分为以下三个子集  
+1.未分配的,不占用任何磁盘空间  
+2.缓存的，缓存在物理储存器中的已分配页  
+3.未缓存的，未缓存在物理储存器中的已分配页  
+DRAM缓存的组织结构  
+DRAM缓存代表L1/L2/L3高速缓存，DRAM缓存表示虚拟储存器系统的缓存，它在主存中缓存  
+与硬件对SRAM缓存相比，操作系统对DRAM缓存使用了更加复杂精密的算法。  
+页表就是一个页表条目(PTE)的数组，PTE是由一个有效位和一个地址字段组成的，有效位表明该虚拟页是否缓存在DRAM中。  
+缺页称为DRAM缓存不命中。  
+缺页异常调用内核中的缺页异常处理程序，该程序可能会选择一个牺牲页，把牺牲页考回磁盘，把需要的页拷回主存  
+在磁盘和储存器之间传送页的活动叫做交换或者页面调度，当不命中发生时换入页面的策略称为按需页面调度。  
+局部性提高了页面调度性能  
+提供独立的地址空间可以分离不同进程的私有储存器  
+PTE中添加许可位可以控制页面访问  
+页表基址寄存器PRBR指向当前页表  
+虚拟地址包含两部分：p位的虚拟页面偏移和(n-p)位的虚拟页号，MMU利用虚拟页号选择PTE  
+高速缓存在储存器之前  
+  
+###0x04 i7内存分析  
+TLB是翻译后备缓冲器，每一行保存一个由单个PTE组成的块  
+i7处理器。处理器包包括4个核、一个大的所有核共享的L3缓存，一个DDR3储存器控制器。  
+每个核包括一个层次结构的TLB、一个层次结构的数据和指令缓存，一组快速的点到点连接(基于QuickPath，是为了让一个核与其他核和外部IO桥直接通信)  
+TLB虚拟寻址，四路组相连，L1L2L3缓存物理寻址，八路相连，块大小为64字节  
+i7采用4级页表，CR3控制器指向第一级页表的起始位置  
+PTE有三个权限位，R/W位确定是可以读写还是只读的，U/S位确定是否能够在用户模式访问，XD位可以禁止从某些指令取指令  
+  
+###0x05 linux虚拟储存器  
+task_struct有一条目指向mm_struct其中一个字段pgd指向一级页表的基址，mmap指向一个vm_area_structs的链表，每个vm_area_structs描述的一个区域  
+vm_area_structs包含以下字段：vm_start,vm_end,vm_prot(读写许可权限),vm_flags描述是否与其他进程共享，还是私有的，以及其他信息  
+vm_next指向下一个区域结构  
+储存器映射，通过虚拟储存器区域与一个磁盘上的对象关联起来，叫做储存器映射。可以是文件系统中的普通文件或匿名文件  
+一个区域可以映射普通磁盘文件的连续部分。文件区被分成页大小的片。如果区域比文件区要大，则用零填充余下部分  
+匿名文件由内核创建，包含的全是二进制零。CPU第一次引用时，内核在物理储存器中找到一个合适的牺牲页面。  
+私有对象使用一种叫做写时拷贝的技术，只要有一个进程师徒写私有区域，就会出发一个保护故障。  
+execve删除已存在的用户区域；映射私有区域；映射共享区域；设置PC  
+mmap要求内核创建一个新的虚拟储存器区域，并将FD指定的对象的一个连续的片映射到这个区域，长度为length,从文件offset字节开始  
+munmap删除区域  
+动态储存器分配。动态储存器分配器维护一个进程虚拟储存器区域，称为堆。  
+对于每个进程，内核维护着一个变量brk指向对的顶部  
+sbrk函数通过增加brk指针来扩展和收缩堆  
