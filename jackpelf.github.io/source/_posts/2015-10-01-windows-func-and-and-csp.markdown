@@ -37,47 +37,47 @@ memmove用于从src拷贝count个字符到dest
   
   
 ### CSP  
-BOOL WINAPI CryptAcquireContext(  
-  _Out_ HCRYPTPROV *phProv,  
-  _In_  LPCTSTR    pszContainer,  
-  _In_  LPCTSTR    pszProvider,  
-  _In_  DWORD      dwProvType,  
-  _In_  DWORD      dwFlags  
-);  
+	BOOL WINAPI CryptAcquireContext(  
+	  _Out_ HCRYPTPROV *phProv,  
+	  _In_  LPCTSTR    pszContainer,  
+	  _In_  LPCTSTR    pszProvider,  
+	  _In_  DWORD      dwProvType,  
+	  _In_  DWORD      dwFlags  
+	);  
 CryptAcquireContext,获得指定CSP 的密钥容器的句柄  
   
-BOOL WINAPI CryptStringToBinary(  
-  _In_    LPCTSTR pszString,  
-  _In_    DWORD   cchString,  
-  _In_    DWORD   dwFlags,  
-  _In_    BYTE    *pbBinary,  
-  _Inout_ DWORD   *pcbBinary,  
-  _Out_   DWORD   *pdwSkip,  
-  _Out_   DWORD   *pdwFlags  
-);  
+	BOOL WINAPI CryptStringToBinary(  
+	  _In_    LPCTSTR pszString,  
+	  _In_    DWORD   cchString,  
+	  _In_    DWORD   dwFlags,  
+	  _In_    BYTE    *pbBinary,  
+	  _Inout_ DWORD   *pcbBinary,  
+	  _Out_   DWORD   *pdwSkip,  
+	  _Out_   DWORD   *pdwFlags  
+	);  
 CryptStringToBinary,把格式化的字符串转换成二进制序列  
   
-BOOL WINAPI CryptDecodeObjectEx(  
-  _In_          DWORD              dwCertEncodingType,  
-  _In_          LPCSTR             lpszStructType,  
-  _In_    const BYTE               *pbEncoded,  
-  _In_          DWORD              cbEncoded,  
-  _In_          DWORD              dwFlags,  
-  _In_          PCRYPT_DECODE_PARA pDecodePara,  
-  _Out_         void               *pvStructInfo,  
-  _Inout_       DWORD              *pcbStructInfo  
-);  
+	BOOL WINAPI CryptDecodeObjectEx(  
+	  _In_          DWORD              dwCertEncodingType,  
+	  _In_          LPCSTR             lpszStructType,  
+	  _In_    const BYTE               *pbEncoded,  
+	  _In_          DWORD              cbEncoded,  
+	  _In_          DWORD              dwFlags,  
+	  _In_          PCRYPT_DECODE_PARA pDecodePara,  
+	  _Out_         void               *pvStructInfo,  
+	  _Inout_       DWORD              *pcbStructInfo  
+	);  
 CryptDecodeObjectEx,对lpszStructType 结构进行解码，此函数支持内存分配选项  
 CryptImportPublicKeyInfo,把公钥信息导入CSP 并且返回它的句柄  
   
-BOOL WINAPI CryptDecrypt(  
-  _In_    HCRYPTKEY  hKey,	//A handle to the key to use for the decryption  
-  _In_    HCRYPTHASH hHash,	//A handle to a hash object.  
-  _In_    BOOL       Final,	//若只有一个分组的数据需要加密或者为最后一个分组，则Final为TRUE  
-  _In_    DWORD      dwFlags,  
-  _Inout_ BYTE       *pbData,	//The buffer holding the data to be decrypted  
-  _Inout_ DWORD      *pdwDataLen	//加密的分组长度的地址  
-);  
+	BOOL WINAPI CryptDecrypt(  
+	  _In_    HCRYPTKEY  hKey,	//A handle to the key to use for the decryption  
+	  _In_    HCRYPTHASH hHash,	//A handle to a hash object.  
+	  _In_    BOOL       Final,	//若只有一个分组的数据需要加密或者为最后一个分组，则Final为TRUE  
+	  _In_    DWORD      dwFlags,  
+	  _Inout_ BYTE       *pbData,	//The buffer holding the data to be decrypted  
+	  _Inout_ DWORD      *pdwDataLen	//加密的分组长度的地址  
+	);  
 CryptDecrypt,使用指定加密密钥来解密一段密文  
   
   
