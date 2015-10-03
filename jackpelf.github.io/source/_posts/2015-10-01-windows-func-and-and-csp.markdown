@@ -5,14 +5,16 @@ date: 2015-10-01 00:52:01 +0800
 comments: true  
 categories:   
 ---  
-###0x00  
+###0x00 异常 
+单步中断(INT1)是由机器内部状态引起的一种中断,当系统标志寄存器的TF标志(单步跟踪标志)被置位时,就会自动产生一次单步中断,使得CPU能在执行一条指令后停下来,并显示各寄存器的内容  
 GetExceptionCode()函数来获取异常码  
 向量化异常处理(VEH)是结构化异常处理的一个扩展  
 AddVectoredExceptionHandler()函数添加一个向量化异常处理器  
-单步中断(INT1)是由机器内部状态引起的一种中断,当系统标志寄存器的TF标志(单步跟踪标志)被置位时,就会自动产生一次单步中断,使得CPU能在执行一条指令后停下来,并显示各寄存器的内容  
   
-###0x01  
-jetTickCount是函数。GetTickCount返回（retrieve）从操作系统启动所经过（elapsed）的毫秒数  
+###0x01  windows api
+1.GetTickCount返回（retrieve）从操作系统启动所经过（elapsed）的毫秒数  
+2.ReadFile	
+
 	BOOL ReadFile(  
 	    HANDLE hFile,                                    //文件的句柄  
 	    LPVOID lpBuffer,                                //用于保存读入数据的一个缓冲区  
@@ -22,6 +24,8 @@ jetTickCount是函数。GetTickCount返回（retrieve）从操作系统启动所
 	    //如文件打开时指定了FILE_FLAG_OVERLAPPED，那么必须，用这个参数引用一个特殊的结构。  
 	    //该结构定义了一次异步读取操作。否则，应将这个参数设为NULL  
 	)  
+
+3.CPPEH_RECORD
   
 	typedef struct CPPEH_RECORD        
 	{        
@@ -31,9 +35,10 @@ jetTickCount是函数。GetTickCount返回（retrieve）从操作系统启动所
 	    DWORD handler;  //handler       
 	    DWORD msEH_ptr; //scopetable       
 	    DWORD disabled; //trylevel       
-	}CPPEH_RECORD,*PCPPEH_RECORD;  ;  
-__local_unwind2函数是结构化异常处理的局部展开函数.  
-memmove用于从src拷贝count个字符到dest  
+	}CPPEH_RECORD,*PCPPEH_RECORD; 
+
+4.__local_unwind2函数是结构化异常处理的局部展开函数.  
+5.memmove用于从src拷贝count个字符到dest  
   
   
 ### CSP  
