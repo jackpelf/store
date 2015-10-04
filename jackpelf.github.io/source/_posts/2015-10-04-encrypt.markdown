@@ -1,0 +1,58 @@
+---  
+layout: post  
+title: "encrypt"  
+date: 2015-10-04 20:34:03 +0800  
+comments: true  
+categories:   
+---  
+  
+###0x00 RSA  
+  
+p，q为质数  
+n=pq称为模  
+欧拉函数ψ=（p-1）（q-1）  
+取e与ψ互质，常取3，17，65537  
+ed=1modψ，得到d  
+公钥为e，n，私钥为d  
+加密  
+c=m^emod（n）  
+m=c^dmod（n）  
+  
+###0x01 AES  
+aes输入，输出，状态分组都是128比特  
+Nr代表轮数  
+密钥长度128，192，256时，  
+Nr10，12，14  
+1.加密  
+先将输入复制到状态分组，对初始轮密钥加，再进行Nr次轮函数对状态数组进行变换，最后一轮与前Nr-1次不同  
+subbytes用s-box中的值替换  
+shiftrows第一行不动，第二行左移1个字节，第三行左移2个字节，第四行左移3个字节  
+mixcolumns矩阵乘法  
+addroundkey将状态数组与轮密钥异或相加  
+2.解密  
+invshiftrows右移  
+invsubbytes用另一个表替换  
+invmixcolumns  
+addroundkey  
+  
+###0x02 TEA  
+  
+TEA算法  
+分组长度为64位  
+  
+###0x03 md5算法  
+  
+消息填充使消息长度与448模512同余  
+先填充一个1，后跟0  
+最后附上64位的长度  
+初始化四个变量  
+数据处理，以512位为一个分组，用四个函数处理，每个输入3个32位  
+f(x.y.z)=(x&y)|((~x)&z)  
+g(x.y.z)=(x&z)|(y&(~z))  
+h(x.y.z)=x^y^z  
+u(x.y.z)=y&(y|(~z))  
+将ABCD中的副本abcd中的三个经fghi运算后与第四个相加，再加上一个32位字和32位加法常数，循环左移若干位后与abcd中的一个相加，并回送至ABCD  
+  
+  
+  
+  

@@ -1,0 +1,37 @@
+
+###0x00 VB
+编译分为自然编译和伪编译
+伪编译将高级语言编译成某种编码，将能解释执行的程序与一同链接
+伪代码编译器最早出现在pascal编译器
+java语言成功实现了这种机制，其伪代码由一系列字节码组成
+担任vb虚拟机的是msvbvn50.dll，msvbvm60.dll
+字符串在vb内部是以unicode储存的，所有字符都是16位
+从vb5开始使用自然编译
+vb字符串比较__vbastrcmp
+变量（16字节）比较__vbavartsteq
+伪代码的执行完全依赖于堆栈
+litvarstr表示将一个varian字符串入栈
+vb使用跳转地址表法来识别操作码
+
+###0x01 .net
+.net统一编程语言，翻译成中间语言IL
+扩展pe文件格式，不再保存机器码，而是IL和元数据，部分结构也被更改用于保存.net信息
+windows不再负责运行，而由.net框架负责
+
+###0x02 vm
+虚拟机可分为stack-based和register-based
+stack-based虚拟机指令短
+
+1.VstartVM
+压入寄存器
+esi指向字节码
+edi指向VMContext
+ebp指向堆栈
+
+2.VMContext是虚拟环境结构，保存了寄存器的值
+
+3.VBegin和VCheckEsp用于平衡堆栈
+
+辅助handler，专门处理堆栈的handler
+普通handler运算，比较，标志位指令，转移指令（call，retn）
+
