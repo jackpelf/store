@@ -1,0 +1,128 @@
+---  
+layout: post  
+title: "openssl"  
+date: 2015-10-05 10:11:01 +0800  
+comments: true  
+categories:   
+---  
+###0x00 证书  
+  
+  
+目前总的来说有三种常用的证书编码格式：X.509证书、PKCS#12证书和PKCS#7证书  
+  
+1. X.509  
+X.509证书是最经常使用的证书，它仅包含了公钥信息而没有私钥信息  
+  
+	---BEGIN CERTIFICATE---  
+	PEM编码的X.509证书内容(省略)……  
+	---END CERTIFICATE---  
+  
+2. PKCS#12证书  
+它可以包含一个或多个证书，并且还可以包含证书对应的私钥。PKCS#12的私钥是经过加密的，密钥由用户提供的口令产生。所以，无论在使用PKCS#12证书的时候一般会要用用户输入密钥口令。  
+  
+3. PKCS#7  
+PKCS#7可以封装一个或多个X.509证书或者PKCS#6证书  
+PKCS#7不包含私钥信息  
+  
+###0x01  PKCS#8  
+  
+PKCS #8 使用 ASN.1 的 DER 编码规则  
+PKCS#8标准是一个非常简单的标准，它主要用于封装私钥和其他相关的属性信息。一般来说，PKCS#8格式的私钥都是被加密的  
+  
+  
+密钥标识如下：  
+  
+	加密的标识  
+        ——BEGIN ENCRYPTED PRIVATE KEY——  
+        ——END ENCRYPTED PRIVATE KEY——  
+        非加密的PKCS#8密钥标识如下：  
+        ——BEGIN PRIVATE KEY——  
+        ——END PRIVATE KEY——  
+  
+  
+###0x02 编码  
+通常使用PEM和DER两种编码方式对要保存的密钥进行编码  
+  
+DER 编码存储的密钥文件是不可读的  
+PEM则不一样，它要友好得多，因为PEM经过BASE64编码  
+  
+  
+  
+###0x03	openssl  
+  
+解析私钥  
+openssl rsa -in rsa_private_key.pem -text -noout  
+解析公钥  
+openssl asn1parse -in rsa_public_key.pem -strparse offset  
+  
+	1、生成私钥pem,  执行命令openssl genrsa -out rsa_private_key.pem 1024  
+	2、生成公钥,执行命令openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem  
+	3、将RSA私钥转换成PKCS8格式,命令执行openssl pkcs8 -topk8 -inform PEM -in rsa_private_key.pem -outform PEM -nocrypt  
+  
+ASN.1是ITU-T的一个标准集，它用来编码及表示通用数据类型，这些数据类型有可打印串值，八位位组串值，位串值，整数值以及用可移值方式组合而成的其他类型序列值  
+ASN.1语法遵循传统的巴科斯范式BNF风格．最基本的表达式如：　Name ::= type . 表示为定义某个名称为Name的元素，它的类型为type  
+  
+openssl rsautl 用来rsa加密与解密  
+  
+  
+###0x04 RSA PEM文件格式  
+  
+1. PEM私钥格式文件  
+  
+	-----BEGIN RSA PRIVATE KEY-----  
+	-----END RSA PRIVATE KEY-----  
+  
+2. PEM公钥格式文件  
+  
+	-----BEGIN PUBLIC KEY-----  
+	-----END PUBLIC KEY-----  
+  
+3. PEM RSAPublicKey公钥格式文件  
+  
+	-----BEGIN RSA PUBLIC KEY-----  
+	-----END RSA PUBLIC KEY-----  
+  
+###0x05	RSA 格式编码  
+PKCS#8  
+  
+	PublicKeyInfo ::= SEQUENCE {  
+	  algorithm       AlgorithmIdentifier,  
+	  PublicKey       BIT STRING  
+	}  
+  
+	AlgorithmIdentifier ::= SEQUENCE {  
+	  algorithm       OBJECT IDENTIFIER,  
+	  parameters      ANY DEFINED BY algorithm OPTIONAL  
+	}  
+  
+  
+	PrivateKeyInfo ::= SEQUENCE {  
+	  version         Version,  
+	  algorithm       AlgorithmIdentifier,  
+	  PrivateKey      BIT STRING  
+	}  
+  
+	AlgorithmIdentifier ::= SEQUENCE {  
+	  algorithm       OBJECT IDENTIFIER,  
+	  parameters      ANY DEFINED BY algorithm OPTIONAL  
+	}  
+  
+PKCS#1  
+  
+	RSAPublicKey ::= SEQUENCE {  
+	    modulus           INTEGER,  -- n  
+	    publicExponent    INTEGER   -- e  
+	}  
+  
+	RSAPrivateKey ::= SEQUENCE {  
+	  version           Version,  
+	  modulus           INTEGER,  -- n  
+	  publicExponent    INTEGER,  -- e  
+	  privateExponent   INTEGER,  -- d  
+	  prime1            INTEGER,  -- p  
+	  prime2            INTEGER,  -- q  
+	  exponent1         INTEGER,  -- d mod (p-1)  
+	  exponent2         INTEGER,  -- d mod (q-1)  
+	  coefficient       INTEGER,  -- (inverse of q) mod p  
+	  otherPrimeInfos   OtherPrimeInfos OPTIONAL  
+	}  
