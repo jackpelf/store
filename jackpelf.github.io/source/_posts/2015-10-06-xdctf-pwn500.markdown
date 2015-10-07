@@ -25,19 +25,23 @@ categories:
 		func_p;		24
 	}
 子程序
+
 	do
 	i += input((__int64)&s[i], a2 - i);
 	while ( i != a2 );
 		fputs(s, stream);
 	return 0LL;
+
 fork的子程序栈溢出，返回的文件失败
-导致real_len为0
+,导致real_len为0
+
 	if ( *(_DWORD *)(ptr_item + 4) )
 	  {
 	    *(_QWORD *)(ptr_item + 16) = 0LL;
 	    *(_DWORD *)(ptr_item + 4) = 0;
 	  }
 	  puts("OK, you could take the exam again\n");
+
 resit时当real_len为0时，堆上的指针不清零,导致UAF
 
 ###0x01 利用
@@ -130,3 +134,12 @@ resit时当real_len为0时，堆上的指针不清零,导致UAF
 	  
 	opt('3')	#shell  
 	r.interactive()  
+
+
+###0x03 misc
+wait（）会暂时停止目前进程的执行，直到有信号来到或子进程结
+束。如果在调用wait（）时子进程已经结束，则wait（）会立即返
+回子进程结束状态值。子进程的结束状态值会由参数status 返回a
+
+gdb
+set follow-fork-mode 调试父进程，子进程不收影响
