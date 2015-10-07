@@ -1,0 +1,108 @@
+---  
+layout: post  
+title: "xdctf_re500"  
+date: 2015-10-07 22:25:04 +0800  
+comments: true  
+categories:   
+---  
+###0x00 windows api钩取  
+1。将内部地址IAT改为钩取函数地址  
+2.查找dll中API的实际地址，直接修改代码  
+使用JMP指令修改起始代码或覆写函数局部  
+  
+保存原API入口的前5个字节  
+改变api的内容为jum func  
+Jmp指令相当于0xe9,占一个字节的内存空间  
+  
+###0x01 sse  
+1.指令  
+SSE有8个128位独立寄存器(XMM0~XMM7)  
+movq：64位数据拷贝，如果内存8位对齐的话，是一个64位写，否则2个32位写  
+movd：32位数据拷贝，如果从内存向MMX寄存器拷贝，MMX高32位清零  
+movdqu 移动不对齐的双四字  
+  
+2.sse函数  
+	extern void _mm_storeu_si128(__m128i *_P, __m128i _B);    
+	返回为空，*_P=_B, Address _P does not need to be 16-byte aligned    
+  
+	extern void _mm_storel_epi64(__m128i *_P, __m128i _Q);    
+	返回为空，*_P[63:0] =_Q0, lower 64 bits    
+  
+	extern __m128i _mm_loadu_si128(__m128i const*_P);  
+	//返回一个__m128i的寄存器，Loads 128-bit value, Address _P does not need be 16-byte aligned    
+  
+3.结构体  
+  
+	typedef union __declspec(intrin_type) __declspec(align(16)) __m128i {  
+	   __int8 m128i_i8[16];  
+	   __int16 m128i_i16[8];  
+	   __int32 m128i_i32[4];  
+	   __int64 m128i_i64[2];  
+	   unsigned __int8 m128i_u8[16];  
+	   unsigned __int16 m128i_u16[8];  
+	   unsigned __int32 m128i_u32[4];  
+	   unsigned __int64 m128i_u64[2];  
+	} __m128i;  
+  
+  
+###0x02 x32dbg  
+x32dbg 查看内存  
+dump 地址  
+快捷键  
+log窗口 alt+L  
+cpu窗口 alt+C  
+  
+###0x03 win api  
+  
+VirtualAlloc  
+该函数的功能是在调用进程的虚地址空间,预定或者提交一部分页  
+  
+BOOL VirtualProtect(  
+LPVOID lpAddress, // 目标地址起始位置  
+DWORD dwSize, // 大小  
+DWORD flNewProtect, // 请求的保护方式  
+PDWORD lpflOldProtect // 保存老的保护方式  
+);  
+  
+LoadString  
+把String Table中Caption里面的字符串读出来到CString对象里  
+  
+HINSTANCE 在win32下与HMODULE是相同的东西，在Win32下还存在主要是因为win16  
+  
+HWND CreateDialogParam(HINSTANCE hlnstancem,LPCTSTR IpTemplateName，HWND hWndParent，DLGPROCIpDialogFunc, LPARAM dwlniParam）；  
+该函数根据对话框模板资源创建一个无模式的对话框。在显示对话框之前，函数把一个应用程序定义的值作为WM_INITDIALOG消息IParam参数传到对话框过程应用程序可用此值来初始化对话框控制  
+  
+  
+###0x04 分析  
+  
+des解密  
+逻辑后移两个字节  
+异或0xe4  
+与机器码比较  
+  
+###0x05	sol.py  
+  
+	from binascii import *  
+	from Crypto.Cipher import DES  
+  
+	m = [0xCF,0x77,0x48,0x09,0x7F,0xE3,0x21,0x6A,0xC5,0xFF,0x3E,0x44,0xF0,0x53,0xBB,0xF2]  
+	for i in range(16):  
+		m[i] = m[i]^0xe4  
+  
+	#r left  
+	c_m = [0 for i in range(16)]  
+	for i in range(16):  
+		c_m[i] = m[(2+i)%16]  
+  
+  
+	s = ''  
+	for i in c_m:  
+		s += chr(i)  
+	s += '\x08'*8  
+  
+	key = '\x34\x45\x86\x99\x1a\x4b\xcd\xa5'  
+	cipher = DES.new(key, DES.MODE_ECB)  
+	result = cipher.encrypt(s)  
+  
+	print b2a_hex(result).upper()  
+  
