@@ -21,7 +21,8 @@ movq：64位数据拷贝，如果内存8位对齐的话，是一个64位写，�
 movd：32位数据拷贝，如果从内存向MMX寄存器拷贝，MMX高32位清零  
 movdqu 移动不对齐的双四字  
   
-2.sse函数  
+2.sse函数 
+ 
 	extern void _mm_storeu_si128(__m128i *_P, __m128i _B);    
 	返回为空，*_P=_B, Address _P does not need to be 16-byte aligned    
   
