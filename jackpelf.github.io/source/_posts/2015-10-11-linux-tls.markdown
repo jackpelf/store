@@ -1,0 +1,192 @@
+---  
+layout: post  
+title: "linux-tls"  
+date: 2015-10-11 01:46:47 +0800  
+comments: true  
+categories:   
+---  
+###0x00 TLS	  
+linux的glibc使用fs（x86_64）gs（x86）寄存器来访问TLS  
+系统调用set_thread_area（x86）和prctl（X86_64）用来设置线程唯一的基址值  
+fs/gs寄存器指向本线程的TLS  
+可以高效地访问TLS里的信息  
+glibc在线程启动的时候将GS寄存器指向GDT的第6个段，完全使用段机制来支持TLS的访问  
+线程启动时通过sys_set_thread_area设置该线程的TLS信息  
+tls节是使用brk，mmap之类调用在主线程堆空间申请的  
+  
+	GDT  
+	0 - null  
+	1 - reserved  
+	2 - reserved  
+	3 - reserved  
+	4 - unused  
+	5 - unused  
+	---------start of TLS  
+	6 - TLS segment #1	[glibc's TLS segment]  
+	7 - TLS segment #2	[Wine's win32 segment]  
+	8 - TLS segment #3  
+	9 - reserved  
+	10 - reserved  
+	11 - reserved  
+	---------start of kernel segments  
+	12 - kernel code segment  
+	13 - kernel data segment  
+	14 - default user CS  
+	15 - default user DS  
+	16 - TSS  
+	17 - LDT  
+	17 - PNPBIOS support  
+  
+###0x01 linux特殊的跳转函数sigsetjmp() siglongjmp()  
+在使用的时候，需要先声明一个sigjmp_buf型的变量用来保存某一时刻的堆栈上下文  
+函数原型  
+int sigsetjmp(sigjmp_buf env, int savesigs);  
+void siglongjmp(sigjmp_buf env, int val);  
+sigsetjmp会将当前的堆栈上下文保存在变量env中，这个变量会在后面的siglongjmp中用到，但是当调用sigsetjmp函数返回时，env变量失效  
+如果savesigs非零，阻塞的信号集合会保存在env变量中，当调用siglongjmp的时候，阻塞的信号也会被恢复  
+  
+###0x02 内嵌汇编  
+  
+gcc a.c -masm=intel  
+  
+示例  
+  
+	#include<stdio.h>  
+	int main()  
+	{  
+		int a1,a2;  
+		int res;  
+		__asm__ (	  
+				".intel_syntax noprefix\n"  
+				"MOV EAX,%0\n"  
+				"MOV EBX,%1\n"  
+				"add eax,ebx\n"  
+				"MOV ECX,0x233\n"  
+			:"=c"(res)		//output  
+			:"m"(a1),"m"(a2)	//input  
+			:			//register that will be changed  
+		);   
+  
+  
+	}  
+  
+  
+###0x03 linux x86_64内存分块  
+  
+	#include<stdio.h>  
+	#include<stdlib.h>  
+  
+	int main()  
+	{  
+		int a1,a2;  
+		long long res;  
+		long *addr;  
+		long *addr1;  
+		long *addr2;  
+		__asm__ (	  
+				".intel_syntax noprefix\n"  
+				"MOV RAX,fs:[0]\n"  
+			:"=a"(res)		//output  
+			:			//input  
+			:			//register that will be changed  
+		);   
+		printf("tls:%p\n", res);  
+		getchar();  
+		addr = malloc(139520);  
+		addr1 = malloc(13);  
+		addr2 = malloc(142349520);  
+		printf("malloc:%p\n", addr);  
+		printf("small malloc:%p\n", addr1);  
+		printf("big malloc:%p\n", addr2);  
+		sleep(32232);  
+  
+	}  
+  
+gcc a.c -masm=intel  
+  
+内存分块  
+  
+	heap  
+	super big heap  
+	other lib  
+	tls & middle heap  
+	vvar  
+	vdso  
+	ld-2.22.so  
+  
+###0x04 linuxx86 内存分块  
+	  
+	#include<stdio.h>  
+	#include<stdlib.h>  
+  
+	int main()  
+	{  
+		int a1,a2;  
+		long res;  
+		long *addr;  
+		long *addr1;  
+		long *addr2;  
+		__asm__ (	  
+				".intel_syntax noprefix\n"  
+				"MOV EAX,gs:[0]\n"  
+			:"=a"(res)		//output  
+			:			//input  
+			:			//register that will be changed  
+		);   
+		printf("tls:%p\n", res);  
+		getchar();  
+		addr = malloc(139520);  
+		addr1 = malloc(13);  
+		addr2 = malloc(142349520);  
+		printf("malloc:%p\n", addr);  
+		printf("small malloc:%p\n", addr1);  
+		printf("big malloc:%p\n", addr2);  
+		sleep(32232);  
+  
+	}  
+  
+gcc a.c -masm=intel  
+  
+heap  
+big malloc  
+middle malloc  
+tls  
+libc  
+  
+  
+###0x05 tls 示例程序  
+  
+	#include <stdlib.h>    
+	#include <stdio.h>    
+	#include <malloc.h>    
+	#include <string.h>    
+	#include <pthread.h>    
+	int main(int argc, char **argv)    
+	{    
+	    int a=10, b = 0;  //b保存GS寄存器表示的段的地址    
+	    //设置三个TLS变量，其中前两个使用堆内存，最后一个不使用    
+		static pthread_key_t thread_key1;    
+		static pthread_key_t thread_key2;    
+		static pthread_key_t thread_key3;    
+		char *addr1 = (char *)malloc(5);    
+		char *addr2 = (char *)malloc(5);    
+		memset(addr1, 0, 5);    
+		memset(addr2, 0, 5);    
+		strcpy(addr1, "aaaa");    
+		strcpy(addr2, "bbbb");    
+		pthread_key_create (&thread_key1, NULL);    
+		pthread_key_create (&thread_key2, NULL);    
+		pthread_key_create (&thread_key3, NULL);    
+		pthread_setspecific (thread_key1, addr1);    
+		pthread_setspecific (thread_key2, addr2);    
+		pthread_setspecific (thread_key3, "1111111111");    
+	    //得到GS指示的段，也就是TLS的地址，这个需要用内嵌汇编来做    
+		asm volatile("movl %%gs:0, %0;"    
+			:"=r"(b)          
+		);    
+	    
+		printf("ok\n");    
+	}    
+  
+	gcc a.c -lpthread -g  
+  

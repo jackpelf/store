@@ -1,0 +1,2 @@
+catch syscall set_thread_area
+
