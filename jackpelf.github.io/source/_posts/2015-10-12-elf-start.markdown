@@ -1,0 +1,68 @@
+---  
+layout: post  
+title: "elf_start"  
+date: 2015-10-12 00:18:28 +0800  
+comments: true  
+categories:   
+---  
+  
+###0x00 _start  
+  
+glibc启动代码_start  
+  
+	xor ebp,ebp	//让ebp清零  
+	pop %esi  
+	mov ecx,esp	//出栈argc到esi,将栈顶地址传给ecx  
+	push esp	//stack_end  
+	push edx  
+	push __libc_csu_fini	//调用前初始化  
+	push __libc_csu_init	//结束后收尾  
+	push ecx	//agrv  
+	push esi	//agrc  
+	push main  
+	hlt  
+  
+  
+__libc_start_main的大体意思  
+  
+__pthread_initialise_minimal();  
+__oxa_atexit(rtld_fini, NULL, NULL);	//等同与atexit，参数将在main结束后调用  
+__libc_init_first(argc, agrv, __environ);  
+__cxa_atexit(fini, NULL, NULL);  
+(*init)(argc, agrv, __environ);  
+result = main(argc, argv, __environ);  
+exit(result);		  
+  
+exit函数  
+void exit(int status)  
+{  
+	while(__exit_funcs != NULL)  
+	{  
+		...  
+		__exit_funcs = __exit_funcs->next;  
+	}  
+	...  
+	_exit(status);  
+}  
+  
+atexit接受一个函数指针作为参数，保证程序正常退出(从main返回或调用exit函数)是，这个函数指针指向的函数会被调用  
+  
+###0x01 windows linux tls实现  
+  
+gcc tls变量  
+加__thread  
+msvc tls变量  
+__declspec(thread)  
+  
+  
+###0x02 dtor ctor  
+  
+GCC通过给代码追加__attribute__((constructor))和__attribute__((destructor))的方式可以追加初始函数和终止函数  
+链接器必须为这些函数建立两个列表 --  一个初始化函数的列表，称为 __CTOR_LIST__,和一个终止函数列表，称为 __DTOR_LIST__  
+  
+###0x03 misc  
+查找一堆文件中某个字符  
+ find <directory> -type f -name "*.c" | xargs grep "<strings>"  
+  
+  
+  
