@@ -27,3 +27,12 @@ categories:
 	for j in range(7):  
 		result += cal(g[j])  
 	print result  
+
+###0x02 misc
+
+DialogBoxParam 
+函数功能：该函数根据对话框模板资源创建一个模态的对话框  
+int DialogBoxParam（HINSTANCE hInstance，LPCTSTR IpTemplateName,HWND hWndParent， DLGPROC IPDialogFunc,LPARAM dwlnitParam）  
+IpTemplateName：标识对话框模板。此参数可以指向一个以NULL结尾的字符串的指针,该字符串指定对话框模扳名，或是指定对话框模板的资源标识符的一个整型值  
+IpDialogFunc：指向对话框过程的指针
+
