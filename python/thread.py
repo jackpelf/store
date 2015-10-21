@@ -1,22 +1,27 @@
-import threading,time
+import threading ,time
 
-def func():
-	pass
+class myThread (threading.Thread) :
+	def __init__(self, argv1) :
+		super(myThread, self).__init__()
+		self.argv1= argv1
+
+	def run(self):
+		pass
 
 def main():
-    print 'starting '
-    threadpool=[]
-    for i in xrange(10):
-        th = threading.Thread(target=func, args=())
-        threadpool.append(th)
+	thpool=[]
+	print 'starting '
 
-    for th in threadpool:
-        th.start()
+	for i in xrange(10):
+		thpool.append(myThread(i,2))
 
-    for th in threadpool :
-        threading.Thread.join( th )
+	for th in thpool:
+		th.start()
 
-    print 'Done'
+	for th in thpool:
+		th.join()
+
+	print 'Done'
 
 if __name__ == '__main__':
         main()

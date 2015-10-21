@@ -1,0 +1,108 @@
+---
+layout: post
+title: "isg_tlc"
+date: 2015-10-21 13:55:34 +0800
+comments: true
+categories: 
+---
+###0x00 
+程序先rot13加密，再base64解密
+得到的数字判断是否符号前n位模n是否为0，
+先暴力得到数字,再开多线程得到flag
+
+###0x01 破解数字
+
+	#include <iostream>
+	using namespace std;
+	int main()
+	{
+	    int i,j,temp;
+	    for (i=0;i<=1000000000;i++)
+	    {
+		temp=i;
+		for (j=9;j>1;j--)
+		{
+		    if (temp % j == 0)
+		    {
+			temp=temp/10;
+			continue;
+		    }
+		    else
+		    {
+			break;
+		    }
+		}
+		if (j==1)
+		{
+		    cout<<i<<endl;
+		 } 
+	    }
+	 }
+
+###0x02 exp
+
+	import base64
+	import threading ,time
+	import threading,time
+	from zio import *
+
+	def rot13(s):
+		res = ''
+		for i in s:
+			d = ord(i)
+			if d<65 or (d>ord('Z') and d<97) or d>ord('z'):
+				res += chr(d)
+			else:
+				if d<97:
+					d = chr((d-65+13)%26+65)
+				else:
+					d = chr((d-97+13)%26+97)
+				res += d
+		return res
+
+	def exp(s):
+		io = zio('./tlc')
+		io.read_until(':')
+		io.writeline(s)
+		try:
+			io.read_until(':')
+			data = io.readline()
+			io.close()
+		except:
+			pass
+
+
+	class myThread (threading.Thread) :
+		def __init__(self, argv1) :
+			super(myThread, self).__init__()
+			self.argv1= argv1
+
+		def run(self):
+			exp(self.argv1)
+	def main():
+		thpool=[]
+		print 'starting '
+		
+		f = open('key', 'r')
+		lines = f.readlines()
+		for line in lines:
+			t = rot13(base64.encodestring(line.replace('\n', '').rjust(9, '0')))
+			print t
+			print type(t)
+			thpool.append(myThread(t))
+
+
+		for th in thpool:
+			th.start()
+
+		for th in thpool:
+			th.join()
+
+		print 'Done'
+
+	if __name__ == '__main__':
+		main()
+
+###0x03 
+	python exp.py | grep ISG
+	Text is: ISG{E43y_c0m131l3}§
