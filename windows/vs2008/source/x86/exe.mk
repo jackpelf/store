@@ -1,11 +1,11 @@
 OUT = test.exe
 EXE = test
 OBJ = *.obj
-C = *.c
+C = *.cpp
 RES =
 
 LINK_FLAG =  /out:$(OUT) /libpath:D:\Blue\Compiling\VC2008\lib /libpath:D:\Blue\Compiling\VC2008\PlatformSDK\Lib
-CL_FLAG = /c /I D:\blue\Compiling\VC2008\h
+CL_FLAG = /c /I d:\Blue\Compiling\vc2008\PlatformSDK\Include /I D:\Blue\Compiling\VC2008\include 
 
 
 #link
