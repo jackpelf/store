@@ -1,0 +1,23 @@
+---
+layout: post
+title: "misc"
+date: 2015-10-29 00:37:51 +0800
+comments: true
+categories: 
+---
+
+###密码
+维吉利亚密码
+根据密钥来选择进行加密的移位密码
+
+###ubuntu
+ubuntu15.04  
+修改
+\# /usr/sbin/lightdm
+false
+关闭图形界面
+
+###Python
+with是一个控制流语句，跟if/for/while/try之类的是一类的，with可以用来简化try finally代码，看起来可以比try finally更清晰
+
+
