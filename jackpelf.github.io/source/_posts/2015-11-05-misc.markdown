@@ -1,0 +1,25 @@
+---
+layout: post
+title: "misc"
+date: 2015-11-05 00:37:13 +0800
+comments: true
+categories: 
+---
+
+###sat问题
+sat问题就是对于一个合取范式是否能使其等于1  
+2-sat问题就是由or连接的子式只包含两个变量  ，可以使用多项式解法  
+
+
+###arm
+
+qemu-system-arm -M versatilepb -kernel vmlinuz-3.2.0-4-versatile -initrd initrd.img-3.2.0-4-versatile -hda debian_wheezy_armel_standard.qcow2 -append "root=/dev/sda1" -m 512
+
+
+### android ssh
+使用SSHDriod
+
+
+###python
+format它通过{}和:来代替%。对字符串格式化处理
+
