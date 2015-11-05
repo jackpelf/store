@@ -6,7 +6,6 @@ comments: true
 categories: 
 ---
 
-#include<stdio.h>
 
 ###0x00
 
@@ -49,6 +48,7 @@ CPU消耗  < 1000ms
 
 ###0x01
 
+	#include<stdio.h>
 	int main()
 	{
 		int sum = 0;

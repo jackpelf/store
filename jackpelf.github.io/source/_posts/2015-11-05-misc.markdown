@@ -22,4 +22,38 @@ qemu-system-arm -M versatilepb -kernel vmlinuz-3.2.0-4-versatile -initrd initrd.
 
 ###python
 format它通过{}和:来代替%。对字符串格式化处理
-
+###ida
+ida dword_偏移量表示一个变量  
+###协处理器指令
+fmul乘法,如果只要一个操作数，则必须是内存操作数，与ST(0)运算，结果存到ST(0)中  
+fnstcw将fpu控制字存储到m2byte  
+###PRNG(伪随机数生成器)  
+包括统计学的PRNG和密码学的PRNG  
+###线性映射（linear map）
+是从一个向量空间V到另一个向量空间W的映射且保持加法运算和数量乘法运算.  
+###最小生成树算法K和P  
+###堆喷射
+堆喷射会将eip改为内存的0x0c0c0c0c，并用js在堆中申请大量内存，包含0x90和shellcode  
+###GS
+vs使用GS选项可以在栈上增加一个canary  
+可以使用#pragma strict_gs_check（on）对某一个函数强制增加canary  
+系统以data段的第一个双字作为种子  
+绕过GS，利用虚函数，攻击SEH  
+###safeSEH
+safeSEH是在异常处理函数调用前，在vs2003中默认开启  
+对其进行安全性检测，a.检测异常处理链是否在栈上b.检测函数指针是否不指向栈上内容  
+可以在vs中使用/SafeSEH选项开启  
+绕过：跳到堆上，利用未开启safeseh的模块  
+###DEP
+软件dep就是safeseh  
+vs中可以使用/NXCOMPAT开启dep，并会在pe头中设置相关标识  
+使用ret2libc绕过dep，利用virtualalloc，virualprotected绕过  
+###ASLR
+alsr会在pe头中设置相关字段  
+使用/dynamicbase开启aslr  
+包括镜像，堆栈，teb，peb随机化  
+攻击未启用aslr的模块，利用堆喷射绕过  
+###SEHOP
+SEHOP是检查seh链的完整性，检测最后一个异常处理函数是否为系统异常处理函数  
+###微软堆
+微软在堆中也加入了cookie，位于原堆块segment table的位置  
