@@ -1,0 +1,71 @@
+---
+layout: post
+title: "misc"
+date: 2015-11-07 01:38:53 +0800
+comments: true
+categories: 
+---
+###defcon fuckup
+edi+4的内容作为idx
+程序先初始化state状态，然后每次返回well512后的新值乘以一个浮点数  
+
+
+
+
+
+###z3
+
+    git clone https://github.com/Z3Prover/z3.git
+     python scripts/mk_make.py --prefix=/home/leo
+      cd build
+      make
+      make install
+      
+用Solver创建一个solver，用add方法添加限制条件，check方法检查sat或者unsat  
+solve(表达式)  
+simplify可以化简逻辑表达式
+使用BitVec,BitVecs创建变量  
+In Z3Py, the operators,<, <=, >, >=, /, %and >>correspond to the signed versions. The corresponding unsigned operators are ULT,ULE, UGT, UGE, UDiv, URemand LShR.
+  
+
+###fpu
+FPU: 8个80位浮点寄存器（数据），16位状态寄存器，16位控制寄存器，16为标识寄存器  
+
+    fld   memory(real)    ; 将存储器中的实型压人堆栈
+    fistp  memory(integer) ;复制st的值，并转换为整型数存入存储器;st出栈
+    fldcw   memoryWORD     ;复制存储器字到控制字寄存器
+    fstp   memory(real)    ;复制st的值为实型数，存入存储器；st出栈
+    fistp  memory(integer) ;复制st的值，并转换为整型数存入存储器;st出栈
+    fild  memory(integer) ;将存储器的整型数值转化为浮点数并压人堆栈
+    
+    
+    
+
+###PRNG
+平方取中法，选择一个m位数Ni作为,做平方运算，得到2m位数，前面不足补零，取中间m位作为下一个随机数  
+线性同余法，有公式Nj+1 ≡(A*Nj + B)(mod M)  
+移位法，有公式Ni+1 = Ni>>n + Ni<<n  
+梅森旋转算法，基于有限二进制字段上的矩阵线性递归  
+
+两个整数a、b，若它们除以整数m所得的余数相等，则称a与b对于模m同余或a同余于b模m
+记作 a≡b (mod m)   
+
+###Python
+Python中assert用来判断语句的真假，如果为假的话将触发AssertionError错误  
+python使用__add__,__sub__等重载运算符
+
+
+
+###Partial Overwrite只改写old eip的低位 
+
+###Well512
+"WELL" stands for "Well Equidistributed Long-period Linear",  
+"512" stands for the period: 2^512  
+A "state" array of 16 uints is used, it's seeded by another PRNG: "System.Random"  
+每次先更改原idx的状态，在更改idx，再更改idx的状态  
+下一个应该是前一个idx
+
+
+
+###gdb
+gdb使用watch设置观察点，disable使某个观察点失
