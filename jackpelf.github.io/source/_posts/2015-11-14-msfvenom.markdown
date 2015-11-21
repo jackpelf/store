@@ -6,20 +6,20 @@ comments: true
 categories: 
 ---
 ###0x00 pre
-msfvenom用来生成win,python,java,php,linux,android的reverse_tcp
-使用use mutil/handler接收shell
-background命令可以后台,sessions可以与某个对话交互
+msfvenom用来生成win,python,java,php,linux,android的reverse_tcp  
+使用use mutil/handler接收shell  
+background命令可以后台,sessions可以与某个对话交互  
 ###0x01 使用
-可以迁移进程 migrate pid
-利用exp提权
-获取敏感信息使用,获取hash：run post/windows/gather下的脚本
-键盘记录 keyscan_start
-网络嗅探 use sniffer
-获取明文密码mimikatz
-端口转发 portfwd
-内网代理 run autoroute -s 
-ssh代理 load meta_ssh
-偷取token load incognito; list_tokens -u    
-内网扫描 auxiliary/scanner
-后门vbs后门/meterpreter后门
-清理痕迹clearev
+可以迁移进程 migrate pid  
+利用exp提权  
+获取敏感信息使用,获取hash：run post/windows/gather下的脚本  
+键盘记录 keyscan_start  
+网络嗅探 use sniffer  
+获取明文密码mimikatz  
+端口转发 portfwd  
+内网代理 run autoroute -s   
+ssh代理 load meta_ssh  
+偷取token load incognito; list_tokens -u      
+内网扫描 auxiliary/scanner  
+后门vbs后门/meterpreter后门  
+清理痕迹clearev  

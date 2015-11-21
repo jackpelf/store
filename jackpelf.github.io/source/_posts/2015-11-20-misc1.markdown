@@ -21,6 +21,9 @@ http://www.softether.org/5-download
     
 ###linux
 linux查找find -name
+/etc/network/interfaces 更改网络接口  
+auto eth0	自动开启eth0
+iface eth0 inet dhcp	自动dhcp
 
 ###stack canray
 stack canry stored in TLS
