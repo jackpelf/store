@@ -1,11 +1,10 @@
 ---
 layout: post
-title: "sshkey&amp;CVE-2014-791&amp;dijkstra&amp;prim"
-date: 2015-11-21 11:22:37 +0800
+title: "sshkey-cve2014791-dijkstra-prim"
+date: 2015-11-21 11:31:28 +0800
 comments: true
 categories: 
 ---
-
 ssh key
 使用ssky-gen生成公钥和私钥
 使用ssh-copy-id把公钥复制到 authorized_keys文件中
@@ -50,8 +49,6 @@ zygote建立运行环境并启动虚拟机
     }
 
 ###prim
-先bfs生成邻接矩阵，再prim算法生成最小生成树
-
 
     #include<iostream>
     #include<stdio.h>
