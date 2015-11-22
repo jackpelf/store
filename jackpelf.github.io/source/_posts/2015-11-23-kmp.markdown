@@ -1,0 +1,42 @@
+---
+layout: post
+title: "kmp"
+date: 2015-11-23 00:51:38 +0800
+comments: true
+categories: 
+---
+
+    int KMP(stringW,stringT){
+        int i=1,j=1;
+        while(i<=n){
+            while(j!=0&&W[j]!=T[i]){
+                j=next[j];  //j变为目标串的下标
+            }
+            if(j==m){
+                return i-m+1;//满足返回下标
+            }else{
+                j++;
+                i++;
+            }
+        }
+        return-1;//failure
+    }
+
+KMP算法，先生成next[]表，实质是在以匹配的串中搜索最长的前缀和后缀的重叠部分，j=next[j]说明前面已经匹配，只需匹配后面即可，再一直往后搜索
+
+next表可有下函数得到
+
+	void GetNext(char T[],int next[])
+	{
+	    next[1]=0;
+	    j=1;k=0;
+	    while(j<len)
+		if((k==0)||(T[j]==T[k]))	//如果匹配，next[j]为匹配的数目,并往后搜索
+		{
+		    j++;
+		    k++;
+		    next[j]=k;
+		}
+	    	else				//否则k推测应该为0
+		    k=next[k];
+	}
