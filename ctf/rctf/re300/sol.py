@@ -7,48 +7,16 @@ table = [0x4f8, 0x258, 0x108, 0x318, 0x2b8, 0x3d8, 0x378, 0x498, 0x438, 0x60, 0x
          0x12c, 0x1bc, 0x18c, 0x27c, 0x21c, 0x3fc, 0x33c, 0x18, 0x3b4, 0x114, 0x474, 0x3c, 0x1d4, 0x174,
          0x294, 0x234, 0x354, 0x2f4, 0x4d4, 0x414, 0x30, 0x204, 0x54, 0x384, 0x2c4, 0x504, 0x444, 0x48,
          0x3e4, 0x84, 0x6c, 0xe4, 0xb4, 0x1a4, 0x144, 0x324, 0x264, 0x4a4]
-list1 = list(table)
+list0 = [0 for i in range(len(table))]
 i = 0
-for index in table:
-	list1[index/12] = enc[i]
+for index in table:		#zhihuan index de weizhi
+	list0[index/12] = enc[i]
 	i += 1
 print ''.join(list1)
 
-out2 = ''
-out3 = ''
-out4 = ''
-out5 = ''
 out1 = ''.join(list1).decode('hex')
+out2 = ''
 for ch in out1:
 	out2 += chr(ord(ch)^0x18)
-	if i%2 == 0:
-		out3 += chr(ord(ch) ^ 0x19)
-	else:
-		out3 += chr(ord(ch) ^ 0x18)
-
-	if i%2 == 0:
-		out4 += chr(ord(ch) ^ 0x18)
-	else:
-		out4 += chr(ord(ch) ^ 0x19)
-	
-	if i%2 == 0:
-		out5 += chr(ord(ch) ^ 0x19)
-	else:
-		out5 += chr(ord(ch) ^ 0x1a)
 	i += 1
-try:
-	print out2.decode('hex')
-except:
-	pass
-try:
-	print out3.decode('hex')
-except:
-	pass
-try:
-	print out4.decode('hex')
-except:
-	pass
-try:
-	print out5.decode('hex')
-except:
-	pass
+print out2.decode('hex')

@@ -1,0 +1,26 @@
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">kmp</span><span class="p">():</span>
+	<span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+			<span class="n">i</span><span class="o">++</span>
+			<span class="n">j</span><span class="o">++</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nb">next</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+				<span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+				<span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">j</span> <span class="o">=</span> <span class="nb">next</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>	<span class="c">#max pre and post len</span>
+
+<span class="k">def</span> <span class="nf">gnext</span><span class="p">():</span>
+	<span class="nb">next</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+	<span class="n">k</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+	<span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="k">while</span> <span class="n">j</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">P</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="n">P</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>	<span class="c">#not start ,find start,</span>
+			<span class="n">k</span> <span class="o">=</span> <span class="nb">next</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+		<span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+		<span class="n">k</span> <span class="o">+=</span> <span class="mi">1</span>
+		<span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">P</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>		<span class="c">#eqal fuzhi qianmiande</span>
+			<span class="nb">next</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="nb">next</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+</pre></div>
