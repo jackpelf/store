@@ -167,3 +167,10 @@ for ch in out1:
 	out2 += chr(ord(ch)^0x18)
 	i += 1
 print out2.decode('hex')
+```
+
+
+###0x02 winapi
+VirtualFree取消或者释放调用进程的虚地址空间页的一个区域   
+"_filbuf" function is called by getc to fill the buffer
+
