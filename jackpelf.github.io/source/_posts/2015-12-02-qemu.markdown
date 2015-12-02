@@ -1,0 +1,7 @@
+---
+layout: post
+title: "qemu"
+date: 2015-12-02 00:27:47 +0800
+comments: true
+categories: 
+---
