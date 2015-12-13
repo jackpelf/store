@@ -5,6 +5,8 @@ anything useful. More comments are at the bottom of this file. */
 
 #include <stdio.h>
 #include <stdlib.h>
+unsigned int byte, crc, mask;
+static unsigned int table[256];
 
 // ---------------------------- reverse --------------------------------
 
@@ -86,22 +88,9 @@ of the 13 or 9 instrucions are load byte.
 
 unsigned int crc32c(unsigned char *message) {
    int i, j;
-   unsigned int byte, crc, mask;
-   static unsigned int table[256];
 
    /* Set up the table, if necessary. */
 
-   if (table[1] == 0) {
-      for (byte = 0; byte <= 255; byte++) {
-         crc = byte;
-         for (j = 7; j >= 0; j--) {    // Do eight times.
-            mask = -(crc & 1);
-            crc = (crc >> 1) ^ (0xEDB88320 & mask);
-         }
-         table[byte] = crc;
-	printf("%x\n", crc);
-      }
-   }
 	
    /* Through with table setup, now calculate the CRC. */
 
@@ -660,69 +649,37 @@ unsigned int crc32h(unsigned char *message) {
 
 int main(int argc, char ** argv) {
 
-   if (argc != 2) {
-      printf("Must have exactly one argument, a message.\n"
-      "You can put quotes around it if it has blanks.\n");
-
-      exit(1);
+   char i,j,k,l,m;
+   if (table[1] == 0) {
+      for (byte = 0; byte <= 255; byte++) {
+         crc = byte;
+         for (j = 7; j >= 0; j--) {    // Do eight times.
+            mask = -(crc & 1);
+            crc = (crc >> 1) ^ (0xEDB88320 & mask);
+         }
+         table[byte] = crc;
+      }
    }
+   char buf[129] = "1 hsi  o ifutpolm3 o aeavr odcmueB5i o onthv  odcmu7.tsesta hspolmwl9aealto ieBtnttigi mosbeS uttyi!Sm ie,h hn ese sntral[[((<<.";
+   buf[128] = 0;
 
 
+char *printable = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c";
 
-   printf("crc32a = %08x\n", crc32a(argv[1]));
-   printf("crc32b = %08x\n", crc32b(argv[1]));
-   printf("crc32c = %08x\n", crc32c(argv[1]));
-   printf("crc32cx= %08x\n", crc32cx(argv[1])); // Must be a mult of 4 in length.
-   printf("crc32d = %08x\n", crc32d(argv[1]));
-   printf("crc32e = %08x\n", crc32e(argv[1]));
-   printf("crc32f = %08x\n", crc32f(argv[1]));
-   printf("crc32g = %08x\n", crc32g(argv[1]));
-   printf("crc32h = %08x\n", crc32h(argv[1]));
-
-   // This one skips the first character, to test the
-   // halfword function with an odd starting address.
-   printf("\ncrc32d = %08x\n", crc32d(argv[1] + 1));
-   printf("crc32a = %08x\n", crc32a(argv[1] + 1));
+int len = strlen(printable);
+	for(i = 0; i <= len; i++){
+	for(j = 0; j <= len; j++){
+	for(k = 0; k <= len; k++){
+	for(l = 0; l <= len; l++){
+	for(m = 0; m <= len; m++){
+	buf[0] = printable[i];
+	buf[16] = printable[j];
+	buf[33] = printable[k];
+	buf[50] = printable[l];
+	buf[67] = printable[m];
+	if(570961634 == crc32c(buf))
+		puts(buf);
+	}}}}}
    return 0;
 }
 
-/* The code above computes, in several ways, the cyclic redundancy check
-usually referred to as CRC-32. This code is used by IEEE-802 (LAN/MAN
-standard), PKZip, WinZip, Ethernet, and some DOD applications.
-
-I investigated this because an early reviewer of Hacker's Delight
-suggested that I might try to find some trick to speed up the
-calculation of the CRC checksum. I have tried and don't see any way to
-speed it up, over the standard table lookup method, which does one table
-lookup per byte of message. The table size is 256 32-bit words. One
-could do two bytes at a time with a table of size 65536 words, but
-that's not very interesting. Not interesting, but maybe useful on a
-machine with a large data cache, so the code is shown above.
-
-This file contains eight routines for doing the CRC-32 calculation, and
-a simple test driver main program.
-
-For references, there are a few web sites, and the book "Numerical
-Recipes in Fortran, The Art of Scientific Computing," by William H.
-Press, Saul A. Teukolsky, William T. Vetterling, and Brian P. Flannery,
-Cambridge University Press, 1992 (2nd ed.), pps 888-894.
-
-Another book reference is "Computer Networks," by Andrew S. Tanenbaum,
-second edition, pages 208-212.
-
-Another reference, which serves as a good introduction to the subject,
-and which I found very well-written and interesting, is:
-
-Peterson, W.W. and Brown, D.T. "Cyclic Codes for Error Detection." In
-Proceedings of the IRE, January 1961, 228-235.
-
-The web site http://www.ciphersbyritter.com/ARTS/CRCMYST.HTM by Terry
-Ritter is a good intro. This material also appeared as "The Great CRC
-Mystery," in Dr. Dobb's Journal of Software Tools, February 1986, 26-34
-and 76-83. He gives several more references.
-
-There are other programs for computing CRC-32 at the PC Magazine web
-site http://www.createwindow.com/programming/crc32/.
-
-This code is not in Hacker's Delight, although a few of the simpler
-programs may be included in a future edition. */

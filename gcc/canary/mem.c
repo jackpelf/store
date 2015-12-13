@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-
+/*gcc mem.c -masm=intel   */
 int main()
 {
 	int a1,a2;
