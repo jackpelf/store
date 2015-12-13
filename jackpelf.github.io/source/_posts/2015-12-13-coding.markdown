@@ -1,0 +1,19 @@
+---
+layout: post
+title: "coding"
+date: 2015-12-13 18:30:25 +0800
+comments: true
+categories: 
+---
+字符编码  
+UTF-8：1-6个变长字节  
+UTF-16：2个字节  
+UTF-32：4个字节  
+GBK：2个字节，简繁体  
+GB2312：支持简体中文  
+big5：支持繁体中文  
+BOM  
+little-endian	FFFE  
+big-endian	FEFF  
+ 
+
