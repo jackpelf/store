@@ -1,0 +1,62 @@
+<div class="highlight"><pre><span class="c">#! /usr/bin/python</span>
+<span class="kn">from</span> <span class="nn">binascii</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">s</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\x7e\x27</span><span class="s">`7Hc626&gt;&#39;</span>
+<span class="n">res</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+	<span class="n">res</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span> <span class="nb">ord</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">^</span> <span class="mi">7</span> <span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;forward 10:&#39;</span><span class="p">,</span><span class="n">res</span>
+
+<span class="n">v1</span> <span class="o">=</span> <span class="s">&#39;c&#39;</span>
+<span class="n">v2</span> <span class="o">=</span> <span class="s">&#39;1&#39;</span>
+<span class="n">v3</span> <span class="o">=</span> <span class="s">&#39;c&#39;</span>
+<span class="n">v4</span> <span class="o">=</span> <span class="s">&#39; &#39;</span>
+<span class="n">v5</span> <span class="o">=</span> <span class="s">&#39;1&#39;</span>
+<span class="n">v6</span> <span class="o">=</span> <span class="s">&#39;s&#39;</span>
+<span class="n">v7</span> <span class="o">=</span> <span class="s">&#39; &#39;</span>
+<span class="n">v8</span> <span class="o">=</span> <span class="s">&#39;v&#39;</span>
+<span class="n">v9</span> <span class="o">=</span> <span class="s">&#39;3&#39;</span>
+<span class="n">v10</span> <span class="o">=</span> <span class="s">&#39;r&#39;</span>
+
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x6f\x20\x74\x68\x69\x73\x20\x69\x73\x20\x61\x20\x6E\x6F\x74\x20</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">v2</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x69\x66\x66\x63\x75\x6C\x74\x20\x70\x72\x6F\x62\x6C\x65\x6D\x20</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">v3</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x66\x20\x79\x6F\x75\x20\x68\x61\x76\x65\x20\x61\x20\x76\x65\x72</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">v4</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x20\x67\x6F\x6F\x64\x20\x63\x6F\x6D\x70\x75\x74\x65\x2E\x42\x75</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">v5</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x20\x69\x66\x20\x79\x6F\x75\x20\x64\x6F\x20\x6E\x6F\x74\x20\x68</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">v6</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x76\x65\x20\x61\x20\x67\x6F\x6F\x64\x20\x63\x6F\x6D\x70\x75\x74</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">v7</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x72\x2E\x49\x74\x20\x73\x65\x65\x6D\x73\x20\x74\x68\x61\x74\x20</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">v8</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x68\x69\x73\x20\x70\x72\x6F\x62\x6C\x65\x6D\x20\x77\x69\x6C\x6C</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">v9</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x74\x61\x6B\x65\x20\x61\x20\x6C\x6F\x74\x20\x6F\x66\x20\x74\x69</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">v10</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\x65\x2E\x42\x75\x74\x20\x6E\x6F\x74\x20\x74\x68\x69\x6E\x67\x20\x69\x73\x20\x69\x6D\x70\x6F\x73\x73\x69\x62\x6C\x65\x2E\x53\x6F\x20\x6A\x75\x73\x74\x20\x74\x72\x79\x20\x69\x74\x21\x21\x53\x6F\x6D\x65\x20\x74\x69\x6D\x65\x73\x2C\x54\x68\x65\x20\x74\x68\x69\x6E\x67\x20\x77\x65\x20\x73\x65\x65\x6D\x20\x69\x73\x20\x6E\x6F\x74\x20\x72\x65\x61\x6C\x6C\x20\x5B\x5D\x5B\x5D\x28\x29\x28\x29\x3C\x3E\x3C\x3E\x2E\x2E</span><span class="s">&#39;</span>
+
+<span class="c">#find str1,str2</span>
+<span class="n">str1</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="n">str2</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+	<span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">str1</span> <span class="o">+=</span> <span class="n">i</span>	
+		<span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">str2</span> <span class="o">+=</span> <span class="n">i</span>
+		<span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">str1</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">+</span> <span class="s">&#39; hsi  o ifutpolm&#39;</span> <span class="o">+</span> <span class="n">v3</span> <span class="o">+</span> <span class="s">&#39; o aeavr odcmueB&#39;</span> <span class="o">+</span> <span class="n">v5</span> <span class="o">+</span> <span class="s">&#39;i o onthv  odcmu&#39;</span> <span class="o">+</span> <span class="n">v7</span> <span class="o">+</span> <span class="s">&#39;.tsesta hspolmwl&#39;</span> <span class="o">+</span> <span class="n">v9</span> <span class="o">+</span> <span class="s">&#39;aealto ieBtnttigi mosbeS uttyi!Sm ie,h hn ese sntral[[((&lt;&lt;.&#39;</span>
+<span class="n">str2</span> <span class="o">=</span> <span class="s">&#39;oti sant&#39;</span> <span class="o">+</span> <span class="n">v2</span> <span class="o">+</span> <span class="s">&#39;fcl rbe fyuhv  e&#39;</span> <span class="o">+</span> <span class="n">v4</span> <span class="o">+</span> <span class="s">&#39;go opt.u fyud o &#39;</span> <span class="o">+</span> <span class="n">v6</span> <span class="o">+</span> <span class="s">&#39;eago optrI em ht&#39;</span> <span class="o">+</span> <span class="n">v8</span> <span class="o">+</span> <span class="s">&#39;i rbe iltk  o ft&#39;</span> <span class="o">+</span> <span class="n">v10</span> <span class="o">+</span> <span class="s">&#39;.u o hn sipsil.ojs r t!oetmsTetigw emi o el ]]))&gt;&gt;.&#39;</span>
+
+
+<span class="c">#brute force</span>
+<span class="k">for</span> <span class="n">v1</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+	<span class="c">#print &#39;looping ... &#39;</span>
+	<span class="k">for</span> <span class="n">v3</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">v5</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">v7</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+				<span class="k">for</span> <span class="n">v9</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+					<span class="n">str1</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">+</span> <span class="s">&#39; hsi  o ifutpolm&#39;</span> <span class="o">+</span> <span class="n">v3</span> <span class="o">+</span> <span class="s">&#39; o aeavr odcmueB&#39;</span> <span class="o">+</span> <span class="n">v5</span> <span class="o">+</span> <span class="s">&#39;i o onthv  odcmu&#39;</span> <span class="o">+</span> <span class="n">v7</span> <span class="o">+</span> <span class="s">&#39;.tsesta hspolmwl&#39;</span> <span class="o">+</span> <span class="n">v9</span> <span class="o">+</span> <span class="s">&#39;aealto ieBtnttigi mosbeS uttyi!Sm ie,h hn ese sntral[[((&lt;&lt;.&#39;</span>
+					<span class="k">if</span> <span class="n">crc32</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">570961634</span><span class="p">:</span>
+						<span class="k">print</span> <span class="s">&#39;found&#39;</span>
+						<span class="k">print</span> <span class="n">v1</span> <span class="o">+</span> <span class="n">v3</span> <span class="o">+</span> <span class="n">v5</span> <span class="o">+</span> <span class="n">v7</span> <span class="o">+</span> <span class="n">v9</span>
+
+
+<span class="k">for</span> <span class="n">v2</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+	<span class="c">#print &#39;looping ... &#39;</span>
+	<span class="k">for</span> <span class="n">v4</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">v6</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+			<span class="k">for</span> <span class="n">v8</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+				<span class="k">for</span> <span class="n">v10</span> <span class="ow">in</span> <span class="n">printable</span><span class="p">:</span>
+					<span class="n">str2</span> <span class="o">=</span> <span class="s">&#39;oti sant&#39;</span> <span class="o">+</span> <span class="n">v2</span> <span class="o">+</span> <span class="s">&#39;fcl rbe fyuhv  e&#39;</span> <span class="o">+</span> <span class="n">v4</span> <span class="o">+</span> <span class="s">&#39;go opt.u fyud o &#39;</span> <span class="o">+</span> <span class="n">v6</span> <span class="o">+</span> <span class="s">&#39;eago optrI em ht&#39;</span> <span class="o">+</span> <span class="n">v8</span> <span class="o">+</span> <span class="s">&#39;i rbe iltk  o ft&#39;</span> <span class="o">+</span> <span class="n">v10</span> <span class="o">+</span> <span class="s">&#39;.u o hn sipsil.ojs r t!oetmsTetigw emi o el ]]))&gt;&gt;.&#39;</span>
+					<span class="k">if</span> <span class="n">crc32</span><span class="p">(</span><span class="n">str2</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">943542018</span><span class="p">:</span>
+						<span class="k">print</span> <span class="s">&#39;found&#39;</span>
+						<span class="k">print</span> <span class="n">v2</span> <span class="o">+</span> <span class="n">v4</span> <span class="o">+</span> <span class="n">v6</span> <span class="o">+</span> <span class="n">v8</span> <span class="o">+</span> <span class="n">v10</span>
+</pre></div>

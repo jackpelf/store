@@ -2,10 +2,14 @@
 #include<stdlib.h>
 #include<pthread.h>
 
+/*
+gcc thread.c -pthread
+*/
+
 void *func(void *arg)
 {
 	printf("i am new thread!\n");
-	printf("new thread PID :%d, TID :%d\n", getpid(), pthread_self());
+	sleep(4);
 }
 
 
@@ -15,11 +19,9 @@ int main()
 	if(pthread_create(&tid, NULL, func, NULL)!=0)
 	{
 		puts("create error");
+		pthread_join(tid, NULL);
 		exit(0);
 	}
-	printf("TID in thread :%d\n", tid);
-	printf("Main PID :%d,TID :%d\n", getpid(), pthread_self());
-	sleep(2);
 	puts("exiting");
 	return 0;
 }
