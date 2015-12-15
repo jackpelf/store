@@ -1,0 +1,8 @@
+break *$rip
+break *0x6017a4
+break *0x6019de
+break *0x4006d6
+break *0x601aec
+break *0x601aec
+break *0x601994
+
