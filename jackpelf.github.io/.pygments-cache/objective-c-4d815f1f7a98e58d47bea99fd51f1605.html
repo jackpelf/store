@@ -1,0 +1,36 @@
+<div class="highlight"><pre><span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
+<span class="bp">NSString</span><span class="o">*</span> <span class="nf">Cipher</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="n">text</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;length is %d&quot;</span><span class="p">,[</span><span class="n">text</span> <span class="n">length</span><span class="p">]);</span>
+	<span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+	<span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">2000</span><span class="p">];</span>
+	<span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Answer is: &quot;</span><span class="p">);</span> 
+	<span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="p">[</span><span class="n">text</span> <span class="n">length</span><span class="p">];</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">text</span> <span class="nl">characterAtIndex</span><span class="p">:</span><span class="n">i</span><span class="p">];</span>
+		<span class="k">if</span><span class="p">(</span> <span class="n">tmp</span> <span class="o">&gt;=</span> <span class="sc">&#39;a&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span> <span class="o">&lt;=</span> <span class="sc">&#39;z&#39;</span><span class="p">)</span>		
+			<span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;a&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span> <span class="p">;</span>
+		<span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">tmp</span> <span class="o">&gt;=</span> <span class="sc">&#39;A&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span> <span class="o">&lt;=</span> <span class="sc">&#39;Z&#39;</span><span class="p">)</span>		
+			<span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;A&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="sc">&#39;A&#39;</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span> <span class="p">;</span>
+		<span class="k">else</span> 
+			<span class="n">buf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="bp">NSString</span> <span class="o">*</span><span class="n">ans</span><span class="o">=</span> <span class="p">[[</span><span class="bp">NSString</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCString</span><span class="p">:</span><span class="n">buf</span><span class="p">];</span>
+	<span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+	<span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Welcome to Caesar cipher</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+	<span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">2000</span><span class="p">];</span>
+	<span class="bp">NSString</span> <span class="o">*</span><span class="n">text</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSString</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCString</span><span class="p">:</span><span class="n">buf</span><span class="p">];</span>
+	<span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Input text you want to cipher&quot;</span><span class="p">);</span>
+		<span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%2000s&quot;</span><span class="p">,</span> <span class="n">buf</span><span class="p">);</span>
+		<span class="bp">NSString</span> <span class="o">*</span><span class="n">text</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSString</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithCString</span><span class="p">:</span><span class="n">buf</span><span class="p">];</span>
+		<span class="n">NSLog</span><span class="p">(</span> <span class="n">Cipher</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="p">);</span>
+		<span class="p">[</span><span class="n">text</span> <span class="k">release</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
