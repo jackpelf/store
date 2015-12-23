@@ -1,0 +1,39 @@
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">java.util.Scanner</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">caesar</span>
+<span class="o">{</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Welcome to Caesar cipher!&quot;</span><span class="o">);</span>
+		<span class="n">Scanner</span> <span class="n">sc</span><span class="o">=</span><span class="k">new</span> <span class="nf">Scanner</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">in</span><span class="o">);</span>
+	 	<span class="k">while</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+		<span class="o">{</span> 
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Input text you want to cihper:&quot;</span><span class="o">);</span>
+			<span class="n">String</span> <span class="n">str</span><span class="o">=</span><span class="kc">null</span><span class="o">;</span>
+			<span class="n">str</span><span class="o">=</span><span class="n">sc</span><span class="o">.</span><span class="na">nextLine</span><span class="o">();</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">cipher</span><span class="o">(</span><span class="n">str</span><span class="o">));</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">cipher</span><span class="o">(</span><span class="n">String</span> <span class="n">data</span><span class="o">)</span>
+	<span class="o">{</span>
+		<span class="n">String</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">String</span><span class="o">();</span>
+		<span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">data</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span>
+		<span class="o">{</span>
+			<span class="kt">int</span> <span class="n">tmp</span><span class="o">;</span>
+			<span class="n">tmp</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+			<span class="k">if</span><span class="o">(</span><span class="n">tmp</span> <span class="o">&gt;=</span> <span class="mi">97</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span> <span class="o">&lt;=</span> <span class="mi">122</span><span class="o">)</span>
+			<span class="o">{</span>
+				<span class="n">tmp</span> <span class="o">=</span> <span class="mi">97</span> <span class="o">+</span> <span class="o">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="mi">97</span> <span class="o">+</span> <span class="mi">5</span><span class="o">)</span> <span class="o">%</span> <span class="mi">26</span><span class="o">;</span>
+			<span class="o">}</span>		
+			<span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">tmp</span> <span class="o">&gt;=</span> <span class="mi">65</span> <span class="o">&amp;&amp;</span> <span class="n">tmp</span> <span class="o">&lt;=</span> <span class="mi">90</span><span class="o">)</span>
+			<span class="o">{</span>
+				<span class="n">tmp</span> <span class="o">=</span> <span class="mi">65</span> <span class="o">+</span> <span class="o">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="mi">65</span> <span class="o">+</span> <span class="mi">5</span><span class="o">)</span> <span class="o">%</span> <span class="mi">26</span><span class="o">;</span>
+			<span class="o">}</span>
+			<span class="k">else</span>
+				<span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
+			<span class="n">res</span> <span class="o">+=</span> <span class="o">(</span><span class="kt">char</span><span class="o">)</span><span class="n">tmp</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</pre></div>

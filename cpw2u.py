@@ -1,5 +1,5 @@
 from sys import *
 from os import *
 
-system("rm wupload/ -r;cp /share/wupload/ -r ./ -f")
+system("rm win -r;cp /share/win/ -r ./ -f")
 
