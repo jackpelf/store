@@ -1,0 +1,26 @@
+<div class="highlight"><pre><span class="o">&lt;</span><span class="nx">input</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span> <span class="nx">name</span><span class="o">=</span><span class="s2">&quot;plaintxt&quot;</span> <span class="nx">value</span> <span class="o">=</span> <span class="s2">&quot;input plaintext&quot;</span><span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span><span class="o">&gt;</span>
+<span class="kd">function</span> <span class="nx">func</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">str</span><span class="o">=</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByName</span><span class="p">(</span><span class="s2">&quot;plaintxt&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+	<span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">&quot;&lt;br/&gt;ciphertext is &lt;br/&gt;&quot;</span><span class="p">);</span>
+	<span class="k">while</span><span class="p">(</span><span class="nx">i</span> <span class="o">!=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">charCodeAt</span><span class="p">();</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nx">tmp</span> <span class="o">&gt;=</span> <span class="mi">97</span> <span class="o">&amp;&amp;</span> <span class="nx">tmp</span> <span class="o">&lt;=</span> <span class="mi">122</span><span class="p">){</span>
+			<span class="kd">var</span> <span class="nx">ch</span> <span class="o">=</span> <span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="mi">97</span> <span class="o">+</span> <span class="p">(</span><span class="nx">tmp</span> <span class="o">-</span> <span class="mi">97</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span><span class="p">);</span>
+			<span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">ch</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">tmp</span> <span class="o">&gt;=</span> <span class="mi">65</span> <span class="o">&amp;&amp;</span> <span class="nx">tmp</span> <span class="o">&lt;=</span> <span class="mi">90</span><span class="p">){</span>
+			<span class="kd">var</span> <span class="nx">ch</span> <span class="o">=</span> <span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="mi">65</span> <span class="o">+</span> <span class="p">(</span><span class="nx">tmp</span> <span class="o">-</span> <span class="mi">65</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span><span class="p">);</span>
+			<span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">ch</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">else</span> 
+			<span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="nx">tmp</span><span class="p">));</span>
+		<span class="nx">i</span> <span class="o">=</span> <span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+<span class="o">&lt;</span><span class="nx">button</span> <span class="nx">onclick</span> <span class="o">=</span> <span class="s2">&quot;func()&quot;</span><span class="o">&gt;</span><span class="nx">encrypt</span><span class="o">&lt;</span><span class="err">/button&gt;</span>
+</pre></div>
