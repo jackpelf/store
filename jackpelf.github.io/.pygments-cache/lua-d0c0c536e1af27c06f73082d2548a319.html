@@ -1,0 +1,23 @@
+<div class="highlight"><pre><span class="cp">#!/usr/bin/lua</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s">input plaintext&quot;</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="nb">io.read</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s">ciphertext is:&quot;</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span><span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="nb">string.len</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+<span class="k">do</span>
+	<span class="n">tmp</span> <span class="o">=</span> <span class="p">(</span><span class="nb">string.byte</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="n">i</span><span class="p">))</span>
+	<span class="k">if</span><span class="p">(</span><span class="n">tmp</span> <span class="o">&gt;=</span> <span class="mi">97</span> <span class="ow">and</span> <span class="n">tmp</span> <span class="o">&lt;=</span> <span class="mi">122</span><span class="p">)</span>
+	<span class="k">then</span>
+		<span class="n">tmp</span> <span class="o">=</span> <span class="mi">97</span> <span class="o">+</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="mi">97</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span>
+		<span class="nb">io.write</span><span class="p">(</span><span class="nb">string.char</span><span class="p">(</span><span class="n">tmp</span><span class="p">))</span>
+	<span class="k">elseif</span><span class="p">(</span><span class="n">tmp</span> <span class="o">&gt;=</span> <span class="mi">65</span> <span class="ow">and</span> <span class="n">tmp</span> <span class="o">&lt;=</span> <span class="mi">90</span><span class="p">)</span>
+	<span class="k">then</span>
+		<span class="n">tmp</span> <span class="o">=</span> <span class="mi">65</span> <span class="o">+</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="mi">65</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">26</span>
+		<span class="nb">io.write</span><span class="p">(</span><span class="nb">string.char</span><span class="p">(</span><span class="n">tmp</span><span class="p">))</span>
+	<span class="k">else</span>
+		<span class="nb">io.write</span><span class="p">(</span><span class="nb">string.char</span><span class="p">(</span><span class="n">tmp</span><span class="p">))</span>
+	<span class="k">end</span>
+	<span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+<span class="k">end</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="s">&quot;</span><span class="p">)</span>
+</pre></div>
