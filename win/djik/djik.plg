@@ -1,0 +1,42 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: djik - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSP27D7.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/djik.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\work\wupload\djik\djik.c"
+]
+Creating command line "cl.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSP27D7.tmp" 
+Creating temporary file "C:\Users\ADMINI~1\AppData\Local\Temp\RSP27D8.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/djik.pdb" /debug /machine:I386 /out:"Debug/djik.exe" /pdbtype:sept 
+.\Debug\djik.obj
+]
+Creating command line "link.exe @C:\Users\ADMINI~1\AppData\Local\Temp\RSP27D8.tmp"
+<h3>Output Window</h3>
+Compiling...
+djik.c
+d:\work\wupload\djik\djik.c(18) : warning C4013: 'time' undefined; assuming extern returning int
+d:\work\wupload\djik\djik.c(22) : warning C4098: 'gen' : 'void' function returning a value
+d:\work\wupload\djik\djik.c(50) : warning C4033: 'dijk' must return a value
+d:\work\wupload\djik\djik.c(94) : warning C4098: 'print_matrix' : 'void' function returning a value
+d:\work\wupload\djik\djik.c(99) : warning C4098: 'print_matrix' : 'void' function returning a value
+d:\work\wupload\djik\djik.c(118) : warning C4098: 'print_all' : 'void' function returning a value
+d:\work\wupload\djik\djik.c(123) : warning C4098: 'print_all' : 'void' function returning a value
+d:\work\wupload\djik\djik.c(149) : warning C4098: 'print_one' : 'void' function returning a value
+d:\work\wupload\djik\djik.c(154) : warning C4098: 'print_one' : 'void' function returning a value
+d:\work\wupload\djik\djik.c(87) : warning C4715: 'dijk' : not all control paths return a value
+Linking...
+
+
+
+<h3>Results</h3>
+djik.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

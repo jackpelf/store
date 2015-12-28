@@ -12,29 +12,38 @@ int start;          //起点
 void gen();
 int dijk();
 
-void gen()
+void gen()      //生成邻接矩阵
 {
     int i,j;
     srand((int)time(0));
     puts("input the number of routers");
     scanf("%d",&num);
+    if(num > 100 || num <= 0)
+        return 0;
     for(i = 0; i < num; i++)
     {
         for(j = 0; j < num; j++)
         {
             network[i][j] = rand()%10 + 1;
+            if(i == j)          //为自身节点
+                network[i][j] = 0;
+            else if(i > j)      //无向图直接赋值
+                network[i][j] = network[j][i];
+            else
+                network[i][j] = rand()%10 + 1;  //使用rand函数获得随机数
             printf("%-3d", network[i][j]);
         }
         puts("");
     }
     isgen = 1;
+    isdijk = 0;
 }
-int dijk()
+int dijk()      //迪杰斯特拉算法
 {
     int next;
     int i,j;
     int c = 0;  //为了Path计数
-    if(!isgen)
+    if(!isgen)      //判断是否合法
     {
         puts("generate network first");
         return 0;
@@ -47,7 +56,7 @@ int dijk()
         return;
     }
     printf("start is %d\n", start);
-    for(i = 0; i < num; i++)
+    for(i = 0; i < num; i++)        //初始化距离
     {
         dist[i] = network[start][i];
         S[i] = 0;
@@ -82,7 +91,7 @@ int dijk()
     puts("done");
     isdijk = 1;
 }
-void print_matrix()
+void print_matrix()     //打印邻接矩阵
 {
     int i,j;
     if(!isgen)
@@ -105,7 +114,7 @@ void print_matrix()
         puts("");
     }
 }
-void print_all()
+void print_all()        //  打印所有的路径
 {
     int i,j;
     int c = 0;
@@ -119,11 +128,11 @@ void print_all()
         puts("run Dijkstra Algorithm first");
         return 0;
     }
-    printf("start : %d\n", start);
+    printf("start point: %d\n", start);
     for(j = 0; j < num; j++)
     {
-        if(i == start)
-            break;
+        if(j == start)
+            continue;
         printf("%d -> ", start);
         for(i = 0; i < num; i++)
         {
@@ -137,7 +146,7 @@ void print_all()
         printf("    distance: %d\n", dist[j]);
     }
 }
-void print_one()
+void print_one()        //打印某一个路径
 {
     int i,e;
     if(!isgen)
@@ -152,7 +161,7 @@ void print_one()
     }
     puts("input end point");
     scanf("%d",&e);
-    if(e > num || e < 0)
+    if(e >= num || e < 0)
     {
         puts("invalid number");
         return;
@@ -174,7 +183,7 @@ void print_one()
     }
     printf("distance: %d", dist[e]);
 }
-void menu()
+void menu()     //菜单
 {
     puts("\n1.generate network");
     puts("2.run Dijkstra algorithm");
@@ -193,7 +202,7 @@ int main()
     isdijk = 0;
     isgen = 0;
     welcome();
-    while(1)
+    while(1)        //while循环不断询问用户的操作
     {
         menu();
         scanf("%d",&opt);

@@ -1,0 +1,11 @@
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\bin\x64\Debug\WindowsApplication1.exe
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\bin\x64\Debug\WindowsApplication1.pdb
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\bin\x64\Debug\WindowsApplication1.xml
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x64\Debug\ResolveAssemblyReference.cache
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x64\Debug\WindowsApplication1.Form1.resources
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x64\Debug\WindowsApplication1.Resources.resources
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x64\Debug\GenerateResource.read.1.tlog
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x64\Debug\GenerateResource.write.1.tlog
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x64\Debug\WindowsApplication1.exe
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x64\Debug\WindowsApplication1.xml
+d:\用户目录\我的文档\visual studio 2010\Projects\WindowsApplication1\WindowsApplication1\obj\x64\Debug\WindowsApplication1.pdb
