@@ -1,0 +1,13 @@
+<div class="highlight"><pre><span class="nb">echo </span>input plaintext
+<span class="nb">read </span>name
+<span class="nb">echo</span> <span class="nv">$name</span>
+<span class="nv">l</span><span class="o">=</span><span class="sb">`</span>expr length <span class="nv">$name</span><span class="sb">`</span>
+<span class="nb">echo</span> <span class="nv">$l</span>
+<span class="nv">i</span><span class="o">=</span>0
+<span class="k">while</span> <span class="o">[</span> <span class="nv">$i</span> -le <span class="nv">$l</span> <span class="o">]</span>
+<span class="k">do</span>
+	<span class="nv">tmp</span><span class="o">=</span><span class="k">${</span><span class="nv">name</span><span class="p">:</span><span class="nv">$i</span><span class="p">:</span><span class="nv">1</span><span class="k">}</span>
+	<span class="nb">echo</span> <span class="nv">$tmp</span>
+	<span class="nv">i</span><span class="o">=</span><span class="sb">`</span>expr <span class="nv">$i</span> + 1<span class="sb">`</span>
+<span class="k">done</span>
+</pre></div>
