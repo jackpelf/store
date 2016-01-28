@@ -1,3 +1,11 @@
+#	gcc -c hello.s
+#	ld hello.o -o hello
+#
+
+
+
+.section .bss	#[xw]
+ch:	.byte	1;
 .section .rodata
 msg:
    .ascii "Hello, world.\n"
@@ -18,3 +26,5 @@ _start:
    movl  $1, %eax     # 系统调用号(sys_exit)
    movl  $0, %ebx     # 参数一:退出代码
    int   $0x80        # 调用内核功能
+
+

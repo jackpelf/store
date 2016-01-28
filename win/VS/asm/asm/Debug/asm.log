@@ -1,0 +1,22 @@
+﻿生成启动时间为 2015/12/29 15:42:11。
+     1>项目“d:\用户目录\我的文档\visual studio 2010\Projects\asm\asm\asm.vcxproj”在节点 2 上(build 个目标)。
+     1>InitializeBuildStatus:
+         正在对“Debug\asm.unsuccessfulbuild”执行 Touch 任务。
+       _MASM:
+         Assembling [Inputs]...
+         cmd.exe /C "C:\Users\Administrator\AppData\Local\Temp\96bbaab0c14340de8eff883fb118afdd.cmd"
+         ml.exe /c /nologo /Zi /Fo"Debug\asm.obj" /Fl"asm.lst" /I "d:\masm32\include" /W3 /errorReport:prompt  /Taasm.asm
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"d:\用户目录\我的文档\visual studio 2010\Projects\asm\Debug\asm.exe" /NOLOGO /LIBPATH:D:\masm32\lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\asm.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"d:\用户目录\我的文档\visual studio 2010\Projects\asm\Debug\asm.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /ENTRY:"main" /DYNAMICBASE /NXCOMPAT /IMPLIB:"d:\用户目录\我的文档\visual studio 2010\Projects\asm\Debug\asm.lib" /MACHINE:X86 Debug\asm.obj
+         LINK : 没有找到 d:\用户目录\我的文档\visual studio 2010\Projects\asm\Debug\asm.exe 或上一个增量链接没有生成它；正在执行完全链接
+         asm.vcxproj -> d:\用户目录\我的文档\visual studio 2010\Projects\asm\Debug\asm.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"d:\用户目录\我的文档\visual studio 2010\Projects\asm\Debug\asm.exe;#1" /manifest Debug\asm.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         正在删除文件“Debug\asm.unsuccessfulbuild”。
+         正在对“Debug\asm.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“d:\用户目录\我的文档\visual studio 2010\Projects\asm\asm\asm.vcxproj”(build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:02.20
