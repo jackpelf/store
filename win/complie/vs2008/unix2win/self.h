@@ -1,4 +1,10 @@
+/*
+for strcut defination and commom functions
+*/
 
+
+#define MAX_HM 20
+#define MAX_F 100
 typedef unsigned int Elf32_Addr;
 typedef unsigned short Elf32_Half;
 typedef unsigned int Elf32_Off;
@@ -76,13 +82,13 @@ typedef struct{
 }fitem;
 typedef struct{
 	int max;
-	fitem fitems[40];
+	fitem fitems[MAX_F];
 }fchart;
 
 
 typedef struct{
 	int max;
-	HMODULE hms[20];
+	HMODULE hms[MAX_HM];
 }hmlist;
 
 

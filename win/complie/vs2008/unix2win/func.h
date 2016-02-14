@@ -1,73 +1,98 @@
-fchart chart;
-hmlist m_list;
-char nametmp[30]="_____";
+/*
+only for func search and hook
+*/
+#include<string.h>
+//#define DEBUG
 
-LPVOID find_f(char* funcname)
+fchart chart;		//self defined func
+hmlist m_list;		//dll list
+
+LPVOID find_func_indll(char* funcname)
 {
 	int i;
 	LPVOID pf=NULL;
-	for(i=0; i<m_list.max; i++)
+	for(i=0; i<=m_list.max; i++)
 	{	
-		//printf("\n\nin find_f\n%s\n", funcname);
-		pf = GetProcAddress(m_list.hms[i], funcname);
-		//printf("test: 0x%p",GetProcAddress(m_list.hms[i],"puts"));
+		char name[40];
+		pf = GetProcAddress(m_list.hms[i], funcname);		//direct
 		if(pf)
 			break;
-		//printf("procaddress: %p\n",pf);
-		//printf("error: %d\n",GetLastError());
+
+		pf = GetProcAddress(m_list.hms[i], funcname + 1);	//cut one _
+		if(pf)
+			break;
+		
+		pf = GetProcAddress(m_list.hms[i], funcname + 2);	//cut two _
+		if(pf)
+			break;
+		
+		pf = GetProcAddress(m_list.hms[i], funcname + 3);	//_IO
+		if(pf)
+			break;
+
+		pf = GetProcAddress(m_list.hms[i], funcname + 4);	//_IO_
+		if(pf)
+			break;
+	
+		pf = GetProcAddress(m_list.hms[i], funcname + 9);	//__isoc99_
+		if(pf)
+			break;
+		
+		name[0] = '_';
+		name[1] = '_';
+		strcpy(name + 2, funcname);
+	
+		pf = GetProcAddress(m_list.hms[i], name + 1);		//add one _
+		if(pf)
+			break;
+		
+		pf = GetProcAddress(m_list.hms[i], name + 0);		//add two _
+		if(pf)
+			break;
 	}
 	return pf;
 }
+
+
+
 unsigned int alarm(unsigned int seconds)
 {	
 	puts("alarm was not supported");
 	return 0;
 }
 
-int read(int fd, void *buf, int count)
-{
-	LPVOID fp = find_f("_read");
-	return ((int (*)(int, void*, int))fp)(fd, buf, count);
+int _IO_getc(FILE *fp)
+{	
+	return (int)getchar();
 }
 
-int write(int fd, void *buf, int count)
-{
-	LPVOID fp = find_f("_write");
-	return ((int (*)(int, void*, int))fp)(fd, buf, count);
-}
-int __isoc99_scanf(char * format, ... )
-{
-	LPVOID fp = find_f("scanf");	
-	//另开辟新栈帧传递参数
-	return ((int (*)(char *))fp)(format);
-}
+
 
 void init_chart()
 {
-//	puts("init chart");
-
+#ifdef DEBUG
+	puts("init chart");
+#endif
 
 //load module
-	m_list.max = 2;
-	m_list.hms[0] = LoadLibrary("msvcrt.dll");
-	m_list.hms[1] = LoadLibrary("msvcrt90.dll");
+	m_list.max = 0;
+	m_list.hms[m_list.max] = LoadLibrary("msvcrt.dll");
+	if(GetLastError() == 0)	m_list.max ++;
+	m_list.hms[m_list.max] = LoadLibrary("msvcrt90.dll");
+	if(GetLastError() == 0)	m_list.max ++;
 
 //add func
-	chart.max = 4;
-	strcpy(chart.fitems[0].name, "alarm");
-	chart.fitems[0].pf = (LPVOID*)alarm;
-	strcpy(chart.fitems[1].name, "write");
-	chart.fitems[1].pf = (LPVOID*)write;
-	strcpy(chart.fitems[2].name, "read");
-	chart.fitems[2].pf = (LPVOID*)read;
-	strcpy(chart.fitems[3].name, "__isoc99_scanf");
-	LPVOID fp = find_f("scanf");	
-	chart.fitems[3].pf = (LPVOID*)fp;
+	chart.max = -1;
+	strcpy(chart.fitems[++chart.max].name, "alarm");
+	chart.fitems[chart.max].pf = (LPVOID*)alarm;
+	strcpy(chart.fitems[++chart.max].name, "_IO_getc");
+	chart.fitems[chart.max].pf = (LPVOID*)_IO_getc;
+	
 
 
 	
-//	printf("%p", chart.fitems[0].pf);
-//	puts(chart.fitems[0].name);
-//	puts("done init chart");
-	
+#ifdef DEBUG
+	printf("m_list.max : %d\n", m_list.max);
+	puts("done init chart");
+#endif	
 }
