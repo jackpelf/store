@@ -3,8 +3,8 @@ from binascii import *
 
 f = open('input', 'w')
 
-#p = process('./echo')
-p = remote('127.0.0.1', 6666)
+p = process('./echo')
+#p = remote('127.0.0.1', 6666)
 #p = remote('192.168.56.102', 6666)
 
 

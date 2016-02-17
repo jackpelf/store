@@ -1,12 +1,8 @@
-from math import *
-import sys
-
 
 p = 61
 q = 53
 n = p*q
 print 'n:',n
-sys.setrecursionlimit(n)
 fin = (p - 1) * (q - 1)
 print 'fin :',fin
 e = 17
@@ -37,18 +33,13 @@ private_key = (n, d)
 print 'public_key: ',public_key
 print 'private_key: ',private_key
 
-def mypower(b, e):
-	if (e != 0):
-		return b * mypower(b, e-1)
-	else:
-		return 1
 
 def encrypt(m):
 	global e, n
-	return int(mypower(m,e)) % n
+	return pow(m, e, n)
 def decrypt(c):
 	global d, n
-	return int(mypower(c,d)) % n
+	return pow(c, d, n)
 
 m = 65
 print 'plain text:', m
