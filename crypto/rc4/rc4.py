@@ -1,5 +1,3 @@
-
-
 class rc4():
 	def __init__(self, Key, plaintext):
 		self.i = 0

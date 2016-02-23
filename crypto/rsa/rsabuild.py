@@ -1,4 +1,5 @@
-
+import sys
+sys.setrecursionlimit(100000000)
 p = 61
 q = 53
 n = p*q
