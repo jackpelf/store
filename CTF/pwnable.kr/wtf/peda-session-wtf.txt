@@ -1,0 +1,4 @@
+break *0x4006BD
+break *0x40063b
+break *0x400694
+

@@ -1,0 +1,5 @@
+file wtf
+b *0x4006BD 
+b *0x40063b
+b *0x400694
+r < in

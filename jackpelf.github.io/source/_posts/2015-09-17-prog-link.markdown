@@ -1,7 +1,0 @@
----
-layout: post
-title: "prog-link"
-date: 2015-09-17 20:29:28 +0800
-comments: true
-categories: 
----

