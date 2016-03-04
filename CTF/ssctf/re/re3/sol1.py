@@ -1,7 +1,4 @@
 s = 'b5h760h64R867618bBwB48BrW92H4w5r'
-s0 = 'b5h760h64R867618bBwB48BrW92H4w5r'
-if s0 in s:
-	print 'kjk'
 for j in range(26):
 	j = 21
 	ans = ''

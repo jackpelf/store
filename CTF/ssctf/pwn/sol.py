@@ -1,15 +1,51 @@
-l0 =  [[7, 1, 1, 6, 7], [1, 1, 2, 4, 1, 1, 1], [1, 3, 1, 1, 1, 3, 1], [1, 3, 1, 1, 1, 2, 1, 1, 3, 1], [1, 3, 1, 1, 1, 1, 2, 1, 3, 1], [1, 1, 1, 1, 1, 1, 1, 1, 1], [7, 1, 1, 1, 1, 1, 1, 1, 7], [4, 1, 1, 1], [2, 1, 2, 4, 4, 2], [1, 1, 1, 2, 1, 1, 1, 4, 2, 1], [1, 5, 2, 3, 2, 2, 1], [4, 2, 2, 1, 3], [1, 1, 3, 1, 1, 2, 1, 1, 2, 1], [1, 2, 1, 4, 1, 4], [1, 5, 2, 6, 2, 1], [2, 2, 1, 1, 6, 2, 3], [1, 2, 2, 2, 2, 2, 1, 1], [1, 2, 2, 3, 1, 1], [1, 3, 2, 1, 1, 1, 2], [3, 1, 1, 4, 2, 3], [3, 2, 8, 1], [2, 1, 1, 1, 1], [7, 2, 1, 4, 1, 1, 2], [1, 1, 1, 2, 1, 1, 2, 2], [1, 3, 1, 2, 1, 1, 1, 2, 5, 1], [1, 3, 1, 5, 1, 1, 1, 1], [1, 3, 1, 1, 4, 1, 1, 2], [1, 1, 2, 1, 3, 4, 1], [7, 3, 1, 3, 2, 1]]
-l1 =  [[7, 3, 3, 2, 7], [1, 1, 2, 1, 1, 1], [1, 3, 1, 3, 1, 1, 1, 1, 3, 1], [1, 3, 1, 1, 2, 2, 1, 1, 1, 3, 1], [1, 3, 1, 1, 1, 4, 1, 1, 1, 3, 1], [1, 1, 2, 2, 1, 1, 1, 1], [7, 1, 1, 1, 1, 1, 1, 1, 7], [1, "1", 1, 1], [2, 3, 2, 1, 2, 1, 1, 2], [1, 2, 1, 1, 3, 5], [2, 4, 2, 1, 1, 1], [1, 1, 1, 2, 3, 2, 1], [1, 1, 2, 2, 1, 3, 1, 2], [2, 1, 1, 1, 3, 6, 1], [1, 2, 1, 1, 4, 1, 1], [2, 3, 5, 1, 1, 1, 1, 1], [1, 2, 1, 1, 1, 2, 1, 2], [1, 1, 1, 1, 1, 3, 2, 3, 3], [2, 1, 1, 6, 4, 1, 3], [1, 3, 1, 1, 2, 3, 1, 2], [1, 1, 4, 1, 1, 8], [2, 2, 2, 1, 1, 1], [7, 2, 3, 2, 1, 1, 1, 1], [1, 1, 1, 2, 1, 2, 1, 1], [1, 3, 1, 5, 1, 6, 2], [1, 3, 1, 2, 2, 1, 1, 1, 1], [1, 3, 1, 2, 1, 3, 1, 1, 1], [1, 1, 4, 1, 3, 1, 1], [7, 1, 1, 1, 1, 1, 2]]
-
-print len(l0)
-f = open('/share/gs14/out1.sgriddler', 'w')
-f.write('MK Version 3.0\r\n\r\n29 29\r\n')
-for i in range(31):
-	f.write('\r\n')
-for i in l0:
-	f.write( ''.join(' '+str(item) for item in i[::-1]) + '\r\n')
-f.write('\r\n')
-for i in l1:
-	f.write( ''.join(' '+str(item) for item in i[::-1]) + '\r\n')
-f.close()
-			
+s = '''
+b2403b9?88924408|Next:id|Salt:5
+59b6a64?58a85a2f|Next:w|Salt:a
+ebcfd0b?dc532969|Next:eval|Salt:d
+30cfce1?8f4fe85d|Next:bash|Salt:1
+6e9b1036?8dd8d17|Next:ls|Salt:c
+679df8e4?564b41e|Next:dir|Salt:f
+316c49e5?833517c|Next:cd|Salt:8
+93e200c3?f7cd9df|Next:mv|Salt:8
+e875a2e?75a1a4a6|Next:cp|Salt:6
+1eae257e?4aa9d5b|Next:pwd|Salt:6
+3ad1439?585ac494|Next:tree|Salt:b
+ad9f68f?9b296397|Next:apt|Salt:4
+a8def39?67ea2d35|Next:mysql|Salt:e
+568125ed?c3f6788|Next:php|Salt:7
+92327e4c?43d619d|Next:head|Salt:4
+bf3d9fe6?1d5a8e9|Next:tail|Salt:7
+db62c11c?5ab251c|Next:cat|Salt:1
+8eb99012?513f24f|->:grep|salt:f
+9a1e7ba1?2c83d83|->:more|salt:7
+aea4e328?1b6f750|->:less|salt:6
+9200b67a?b7c3d0e|->:vim|salt:5
+cdcd507?bb1864cd|->:nano|Salt:3
+ad9f68f?9b296397|->:sed|Salt:4
+2bca8ccb?946b7a0|->:awk|salt:d
+83091ce2?c893686|->:ps|salt:3
+aa0efb9e?9094440|->:top|salt:9
+58544024?0f74fd6|->:kill|salt:3
+210194c?75687be6|->:find|Salt:0
+5c8cd5a?e6b01684|->:break|Salt:a
+3afb633e?0cdf1b2|->:gcc|salt:6
+72ffd8eb?81f4687|->:debug|salt:c
+c30201f7?f142449|->:git|salt:0
+f062936a?6d3c8bd|->:curl|salt:5
+f062936a?6d3c8bd|->:wget|salt:5
+8e4c41f2?47bfa2f|->:gzip|salt:8
+6a60928b?5a7e228|->:tar|salt:8
+5cb4d45b?d0e5624|->:ftp|salt:c
+5568161?8cdf4ad2|->:ssh|Salt:8
+74b5a98?c9bbd4b5|->:exit|Salt:c
+'''
+flag = ''
+import hashlib
+for each in s.split('\n'):
+	for i in 'QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm':
+		m = hashlib.md5()
+		m.update(i + each[-1:])
+		if m.hexdigest()[8:24][:4] == each[:4]:
+			flag += i
+print len(flag)
+print (flag)

@@ -1,0 +1,2 @@
+s = '||OO|O|||OO|OO||O|||||O|OO|||O|||O|O|||||OOOOO|O||OOOOO|' # ||OOO|O|O| O|||O|OOOOO||||OO||O|OO|O|O|OOOOOO|OOOOO||||OO
+print len(s)
