@@ -1,12 +1,5 @@
 import sys
 sys.setrecursionlimit(100000000)
-p = 61
-q = 53
-n = p*q
-print 'n:',n
-fin = (p - 1) * (q - 1)
-print 'fin :',fin
-e = 17
 
 def gcd(a, b):
 	if b == 0:
@@ -26,26 +19,21 @@ def modInv(e, fin):
 		return extendedeuclid(e, fin)[1] % fin
 	else:
 		return 0
-
-
-d = modInv(e, fin)
-public_key = (n, e)
-private_key = (n, d)
-
-print 'public_key: ',public_key
-print 'private_key: ',private_key
-
-
-def encrypt(m):
-	global e, n
+def encrypt(m,e,n):
 	return pow(m, e, n)
-def decrypt(c):
-	global d, n
+def decrypt(c,d,n):
 	return pow(c, d, n)
+def primet(n):
+	ans = [2]
+	for i in range(n)[3:]:
+		isp = 1
+		for j in ans:
+			if i%j == 0:
+				isp = 0
+				break
+		if isp==1:
+			ans.append(i)
+	return ans
 
-m = 65
-print 'plain text:', m
-c = encrypt(m)
-print 'encrypted text:', c
-print 'decrypted text:', decrypt(c)
-
+if __name__ == '__main__':
+	print 'num lib by Slei.casper'
