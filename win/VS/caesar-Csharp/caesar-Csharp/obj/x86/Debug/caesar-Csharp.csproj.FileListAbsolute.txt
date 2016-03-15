@@ -1,9 +1,0 @@
-d:\用户目录\我的文档\visual studio 2010\Projects\caesar-Csharp\caesar-Csharp\bin\Debug\caesar-Csharp.exe
-d:\用户目录\我的文档\visual studio 2010\Projects\caesar-Csharp\caesar-Csharp\bin\Debug\caesar-Csharp.pdb
-d:\用户目录\我的文档\visual studio 2010\Projects\caesar-Csharp\caesar-Csharp\obj\x86\Debug\ResolveAssemblyReference.cache
-d:\用户目录\我的文档\visual studio 2010\Projects\caesar-Csharp\caesar-Csharp\obj\x86\Debug\caesar_Csharp.Form1.resources
-d:\用户目录\我的文档\visual studio 2010\Projects\caesar-Csharp\caesar-Csharp\obj\x86\Debug\caesar_Csharp.Properties.Resources.resources
-d:\用户目录\我的文档\visual studio 2010\Projects\caesar-Csharp\caesar-Csharp\obj\x86\Debug\GenerateResource.read.1.tlog
-d:\用户目录\我的文档\visual studio 2010\Projects\caesar-Csharp\caesar-Csharp\obj\x86\Debug\GenerateResource.write.1.tlog
-d:\用户目录\我的文档\visual studio 2010\Projects\caesar-Csharp\caesar-Csharp\obj\x86\Debug\caesar-Csharp.exe
-d:\用户目录\我的文档\visual studio 2010\Projects\caesar-Csharp\caesar-Csharp\obj\x86\Debug\caesar-Csharp.pdb
